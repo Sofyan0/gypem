@@ -95,7 +95,10 @@ class HomePageContent extends StatelessWidget {
                     size: 40,
                     color: Colors.white,
                   ),
-                  Image.asset('assets/images/logo.png')
+                   Image.asset('assets/images/logo2.png',
+                  width: 70,  // Menentukan lebar gambar
+                  height: 70, // Menentukan tinggi gambar
+                  )
                 ],
               ),
               SizedBox(height: 20),

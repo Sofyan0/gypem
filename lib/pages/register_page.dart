@@ -23,10 +23,10 @@ class _RegisterPageState extends State<RegisterPage> {
   String _selectedEducationLevel = 'SD';
   List<String> _educationLevels = ['SD', 'SMP', 'SMA', 'Universitas', 'Umum'];
   String _selectedProvince = '';
-  List<String> _provinces = [];
+  List<dynamic> _provinces = [];
   String _selectedCity = '';
-  List<String> _cities = [];
-  bool _showErrors = false; // Untuk menampilkan atau menyembunyikan pesan kesalahan
+  List<dynamic> _cities = [];
+  bool _showErrors = false;
 
   @override
   void initState() {
@@ -40,10 +40,12 @@ class _RegisterPageState extends State<RegisterPage> {
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
-          _provinces = data.map<String>((province) => province['name'] as String).toList();
-          _selectedProvince = _provinces.isNotEmpty ? _provinces[0] : '';
+          _provinces = data;
+          _selectedProvince = _provinces.isNotEmpty ? _provinces[0]['id'].toString() : '';
         });
-        _fetchCities(_selectedProvince);
+        if (_selectedProvince.isNotEmpty) {
+          _fetchCities(_selectedProvince);
+        }
       } else {
         throw Exception('Failed to load provinces');
       }
@@ -52,14 +54,14 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Future<void> _fetchCities(String provinceName) async {
+  Future<void> _fetchCities(String provinceId) async {
     try {
-      final response = await http.get(Uri.parse('https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceName.toLowerCase()}.json'));
+      final response = await http.get(Uri.parse('https://www.emsifa.com/api-wilayah-indonesia/api/regencies/$provinceId.json'));
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
-          _cities = data.map<String>((city) => city['name'] as String).toList();
-          _selectedCity = _cities.isNotEmpty ? _cities[0] : '';
+          _cities = data;
+          _selectedCity = _cities.isNotEmpty ? _cities[0]['id'].toString() : '';
         });
       } else {
         throw Exception('Failed to load cities');
@@ -72,8 +74,8 @@ class _RegisterPageState extends State<RegisterPage> {
   void _updateCitiesDropdown(String? value) {
     setState(() {
       _selectedProvince = value!;
+      _selectedCity = ''; // Reset _selectedCity sebelum memuat kota baru
       _fetchCities(value);
-      _selectedCity = ''; // Set _selectedCity to default value
     });
   }
 
@@ -136,11 +138,11 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 20.0),
             DropdownButtonFormField<String>(
-              value: _selectedProvince,
-              items: _provinces.map((String province) {
+              value: _selectedProvince.isEmpty ? null : _selectedProvince,
+              items: _provinces.map((province) {
                 return DropdownMenuItem<String>(
-                  value: province,
-                  child: Text(province),
+                  value: province['id'].toString(),
+                  child: Text(province['name']),
                 );
               }).toList(),
               onChanged: _updateCitiesDropdown,
@@ -156,11 +158,11 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 20.0),
             DropdownButtonFormField<String>(
-              value: _selectedCity,
-              items: _cities.map((String city) {
+              value: _selectedCity.isEmpty ? null : _selectedCity,
+              items: _cities.map((city) {
                 return DropdownMenuItem<String>(
-                  value: city,
-                  child: Text(city),
+                  value: city['id'].toString(),
+                  child: Text(city['name']),
                 );
               }).toList(),
               onChanged: (String? value) {
@@ -257,16 +259,137 @@ class _RegisterPageState extends State<RegisterPage> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _showErrors = true; // Menampilkan pesan kesalahan setelah tombol ditekan
+                  _showErrors = true;
                 });
                 if (_fullNameController.text.isNotEmpty &&
                     _schoolController.text.isNotEmpty &&
                     _birthdateController.text.isNotEmpty &&
                     _phoneNumberController.text.isNotEmpty) {
-                  // Implementasi logika pendaftaran di sini
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterCredentialsPage()),
+                  );
                 }
               },
               child: Text('Selanjutnya'),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Color.fromARGB(255, 200, 227, 249),
+    );
+  }
+}
+
+class RegisterCredentialsPage extends StatefulWidget {
+  @override
+  _RegisterCredentialsPageState createState() => _RegisterCredentialsPageState();
+}
+
+class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+
+  bool _showErrors = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pengisian Username dan Password'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 20.0),
+            TextFormField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                hintText: 'Username',
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.7),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                contentPadding: EdgeInsets.all(15.0),
+                errorText: _showErrors && _usernameController.text.isEmpty ? 'Username tidak boleh kosong' : null,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Email',
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.7),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                contentPadding: EdgeInsets.all(15.0),
+                errorText: _showErrors && _emailController.text.isEmpty ? 'Email tidak boleh kosong' : null,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              'Pastikan menggunakan email yang valid. Email yang digunakan untuk Login dan menerima notifikasi.',
+              style: TextStyle(fontSize: 14.0, color: Colors.grey),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.7),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                contentPadding: EdgeInsets.all(15.0),
+                errorText: _showErrors && _passwordController.text.isEmpty ? 'Password tidak boleh kosong' : null,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: 'Konfirmasi Password',
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.7),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                contentPadding: EdgeInsets.all(15.0),
+                errorText: _showErrors && _confirmPasswordController.text.isEmpty ? 'Konfirmasi Password tidak boleh kosong' : null,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              'Gunakan password yang mudah diingat, password digunakan untuk Login.',
+              style: TextStyle(fontSize: 14.0, color: Colors.grey),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _showErrors = true;
+                });
+                if (_usernameController.text.isNotEmpty &&
+                    _emailController.text.isNotEmpty &&
+                    _passwordController.text.isNotEmpty &&
+                    _confirmPasswordController.text.isNotEmpty &&
+                    _passwordController.text == _confirmPasswordController.text) {
+                  // Implementasi logika pendaftaran di sini
+                }
+              },
+              child: Text('Daftar'),
             ),
           ],
         ),
