@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_screen/screens/home_screen.dart'; // Import halaman home_screen.dart
-import 'package:flutter_onboarding_screen/screens/register_page.dart'; // Import halaman register_page.dart
+import 'package:flutter_onboarding_screen/pages/home_page.dart'; // Import halaman home_screen.dart
+import 'package:flutter_onboarding_screen/pages/register_page.dart'; // Import halaman register_page.dart
 
 void main() {
   runApp(MaterialApp(

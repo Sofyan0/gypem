@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'event_page.dart';
+import 'history_page.dart';
+import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,7 +16,7 @@ class _HomePageState extends State<HomePage> {
     HomePageContent(),
     EventPage(),
     HistoryPage(),
-    ProfilePage(),
+    ProfilePage(), // Tambahkan ProfilePage di sini
   ];
 
   // Fungsi untuk mengubah halaman berdasarkan indeks tombol navigasi yang dipilih
@@ -27,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('logim'),
+        title: Text('Home Page'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -35,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-body: _widgetOptions.elementAt(_selectedIndex),
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -69,7 +72,6 @@ body: _widgetOptions.elementAt(_selectedIndex),
 
 class HomePageContent extends StatelessWidget {
   @override
-  
   Widget build(BuildContext context) {
     return ListView(
       children: [
@@ -193,48 +195,6 @@ class HomePageContent extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class EventPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Event'),
-      ),
-      body: Center(
-        child: Text('Event Page'),
-      ),
-    );
-  }
-}
-
-class HistoryPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('History'),
-      ),
-      body: Center(
-        child: Text('History Page'),
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: Center(
-        child: Text('Profile Page'),
-      ),
     );
   }
 }
