@@ -95,10 +95,11 @@ class HomePageContent extends StatelessWidget {
                     size: 40,
                     color: Colors.white,
                   ),
-                   Image.asset('assets/images/logo2.png',
-                  width: 70,  // Menentukan lebar gambar
-                  height: 70, // Menentukan tinggi gambar
-                  )
+                  Image.asset(
+                    'assets/images/logo2.png',
+                    width: 70, // Menentukan lebar gambar
+                    height: 70, // Menentukan tinggi gambar
+                  ),
                 ],
               ),
               SizedBox(height: 20),
@@ -161,7 +162,11 @@ class HomePageContent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Tambahkan foto di sini
-                    Image.asset('assets/images/poster1_$index.jpg'), // Ganti dengan path foto yang sesuai
+                    Image.asset('assets/images/poster1.jpg', // Ganti dengan path foto yang sesuai
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        return Text('Gagal memuat gambar');
+                      },
+                    ),
                     SizedBox(height: 10),
                     Text('Item $index'),
                   ],
@@ -178,20 +183,31 @@ class HomePageContent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+      SizedBox(height: 10),
         Container(
-          height: 200,
+          height: 500,  // Adjust the height to fit the content
           child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: 10,
+            scrollDirection: Axis.vertical,  // Change to vertical scrolling
+            itemCount: 5,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 width: double.infinity,
-                height: 100,
+                height: 160,
                 margin: EdgeInsets.symmetric(vertical: 10),
                 color: Colors.blue,
-                child: Center(
-                  child: Text('Item $index'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Tambahkan foto di sini
+                    Image.asset(
+                      'assets/images/poster2_.jpg', // Ganti dengan path foto yang sesuai
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        return Text('Gagal memuat gambar'); 
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    Text('Item $index'),
+                  ],
                 ),
               );
             },
