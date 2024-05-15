@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_screen/pages/home_page.dart'; // Import halaman home_screen.dart
-import 'package:flutter_onboarding_screen/pages/register_page.dart'; // Import halaman register_page.dart
+import 'home_page.dart'; // Import halaman home_screen.dart
+import 'register_page.dart'; // Import halaman register_page.dart
 
 void main() {
   runApp(MaterialApp(
@@ -14,17 +14,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  bool _usernameError = false;
-  bool _passwordError = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Masuk'),
-        centerTitle: true, // Membuat judul berada di tengah
+        centerTitle: true,
       ),
       body: Stack(
         children: [
@@ -43,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.blue, Colors.white], // Ganti warna sesuai keinginan
+                  colors: [Colors.blue, Colors.white],
                 ),
               ),
             ),
@@ -52,110 +51,106 @@ class _LoginPageState extends State<LoginPage> {
           Positioned.fill(
             child: Padding(
               padding: EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Username TextField
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      hintText: 'Username/Email', // Mengubah label menjadi 'Username/Email'
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.7),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Email TextFormField
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Username/Email',
+                        border: OutlineInputBorder(),
                       ),
-                      contentPadding: EdgeInsets.all(15.0),
-                      errorText: _usernameError ? 'Username/Email tidak boleh kosong' : null, // Mengubah pesan error
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email tidak boleh kosong';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  SizedBox(height: 20.0),
-                  // Password TextField
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.7),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                    SizedBox(height: 20.0),
+                    // Password TextFormField
+                    SizedBox(height: 16),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(),
                       ),
-                      contentPadding: EdgeInsets.all(15.0),
-                      errorText: _passwordError ? 'Password tidak boleh kosong' : null,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password tidak boleh kosong';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  SizedBox(height: 10.0), // Jarak tambahan ke bawah
-                  // Text "Lupa Password?"
-                  GestureDetector(
-                    onTap: () {
-                      // Fungsi untuk lupa password
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Lupa Password?',
-                        style: TextStyle(color: Colors.blue, fontSize: 16.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                  // Login Button
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _usernameError = _usernameController.text.isEmpty;
-                        _passwordError = _passwordController.text.isEmpty;
-                      });
-
-                      if (!_usernameError && !_passwordError) {
-                        // Implement login functionality here
-
-                        // Navigasi ke halaman home_screen.dart
+                    SizedBox(height: 10.0),
+                    // Text "Lupa Password?"
+                    GestureDetector(
+                      onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
                         );
-                      }
-                    },
-                    child: Text('Masuk'),
-                  ),
-                  SizedBox(height: 20.0),
-                  // Text "Belum punya akun? Daftar sekarang."
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Belum punya akun? ',
-                        style: TextStyle(
-                          color: Colors.blue,
+                      },
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Lupa Password?',
+                          style: TextStyle(color: Colors.blue, fontSize: 16.0, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          // Navigasi ke halaman pendaftaran
+                    ),
+                    SizedBox(height: 20.0),
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          // Implement login functionality here
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterPage(),
-                            ),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                           );
-                        },
-                        child: Text(
-                          'Daftar sekarang',
+                        }
+                      },
+                      child: Text('Masuk'),
+                    ),
+                    SizedBox(height: 20.0),
+                    // Text "Belum punya akun? Daftar sekarang."
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Belum punya akun? ',
                           style: TextStyle(
                             color: Colors.blue,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Daftar sekarang',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -165,15 +160,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-//... kode lainnya
-
-
+// ForgotPasswordPage class
 class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true, // Membuat judul berada di tengah
+        centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -190,10 +183,10 @@ class ForgotPasswordPage extends StatelessWidget {
                 'Silahkan masukkan email anda',
               ),
               SizedBox(height: 20.0),
-              // Email TextField
-              TextField(
+              // Email TextFormField
+              TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Email',
+                  labelText: 'Email',
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.7),
                   border: OutlineInputBorder(
@@ -222,12 +215,13 @@ class ForgotPasswordPage extends StatelessWidget {
   }
 }
 
+// OtpVerificationPage class
 class OtpVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true, // Membuat judul berada di tengah
+        centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -290,12 +284,13 @@ class OtpVerificationPage extends StatelessWidget {
   }
 }
 
+// NewPasswordPage class
 class NewPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true, // Membuat judul berada di tengah
+        centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -313,10 +308,10 @@ class NewPasswordPage extends StatelessWidget {
                 style: TextStyle(fontSize: 12.0),
               ),
               SizedBox(height: 20.0),
-              // New Password TextField
-              TextField(
+              // New Password TextFormField
+              TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Password Baru',
+                  labelText: 'Password Baru',
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.7),
                   border: OutlineInputBorder(
@@ -326,10 +321,10 @@ class NewPasswordPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.0),
-              // Verify Password TextField
-              TextField(
+              // Verify Password TextFormField
+              TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Verifikasi Password',
+                  labelText: 'Verifikasi Password',
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.7),
                   border: OutlineInputBorder(
