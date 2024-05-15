@@ -3,6 +3,26 @@ import 'event_page.dart';
 import 'history_page.dart';
 import 'profile_page.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      // Tambahkan rute /notifications di sini
+      routes: {
+        '/': (context) => HomePage(),
+        '/notifications': (context) => NotifikasiPage(),
+        //Tambahkan rute-rute lain jika ada
+      },
+      initialRoute: '/', // Rute awal aplikasi
+    );
+  }
+}
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -11,15 +31,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  // Daftar halaman yang akan ditampilkan berdasarkan indeks tombol navigasi
   static List<Widget> _widgetOptions = <Widget>[
     HomePageContent(),
     EventPage(),
     HistoryPage(),
-    ProfilePage(), // Tambahkan ProfilePage di sini
+    ProfilePage(),
   ];
 
-  // Fungsi untuk mengubah halaman berdasarkan indeks tombol navigasi yang dipilih
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -42,24 +60,24 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home, color: Colors.purple),
             label: 'Home',
-            backgroundColor: Colors.purple, // Warna latar belakang ungu
+            backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.event),
+            icon: Icon(Icons.event, color: Colors.purple),
             label: 'Event',
-            backgroundColor: Colors.purple, // Warna latar belakang ungu
+            backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: Icon(Icons.history, color: Colors.purple),
             label: 'History',
-            backgroundColor: Colors.purple, // Warna latar belakang ungu
+            backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: Colors.purple),
             label: 'Profile',
-            backgroundColor: Colors.purple, // Warna latar belakang ungu
+            backgroundColor: Colors.white,
           ),
         ],
         currentIndex: _selectedIndex,
@@ -90,10 +108,15 @@ class HomePageContent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.notifications,
-                    size: 40,
-                    color: Colors.white,
+                  IconButton(
+                    icon: Icon(
+                      Icons.notifications,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/notifications'); // Navigasi ke halaman notifikasi
+                    },
                   ),
                   Image.asset(
                     'assets/images/logo2.png',
@@ -133,7 +156,7 @@ class HomePageContent extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/berita_terkini'); // Navigasi ke halaman berita terkini
+                  Navigator.pushNamed(context, '/berita_terkini');
                 },
                 child: Text(
                   "Lihat Semua",
@@ -157,18 +180,17 @@ class HomePageContent extends StatelessWidget {
               return Container(
                 width: 160,
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                color: Colors.blue,
+                color: Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Tambahkan foto di sini
-                    Image.asset('assets/images/poster1.jpg', // Ganti dengan path foto yang sesuai
+                    Image.asset('assets/images/poster1.jpg',
                       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                         return Text('Gagal memuat gambar');
                       },
                     ),
                     SizedBox(height: 10),
-                    Text('Item $index'),
+                    Text('Olimpiade GYPEM'),
                   ],
                 ),
               );
@@ -183,30 +205,29 @@ class HomePageContent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-      SizedBox(height: 10),
+        SizedBox(height: 10),
         Container(
-          height: 500,  // Adjust the height to fit the content
+          height: 500,
           child: ListView.builder(
-            scrollDirection: Axis.vertical,  // Change to vertical scrolling
+            scrollDirection: Axis.vertical,
             itemCount: 5,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 width: double.infinity,
                 height: 160,
                 margin: EdgeInsets.symmetric(vertical: 10),
-                color: Colors.blue,
+                color: Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Tambahkan foto di sini
                     Image.asset(
-                      'assets/images/poster2_.jpg', // Ganti dengan path foto yang sesuai
+                      'assets/images/poster2.jpg',
                       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                        return Text('Gagal memuat gambar'); 
+                        return Text('Gagal memuat gambar');
                       },
                     ),
                     SizedBox(height: 10),
-                    Text('Item $index'),
+                    Text('IFSO'),
                   ],
                 ),
               );
@@ -214,6 +235,20 @@ class HomePageContent extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class NotifikasiPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Notifikasi'),
+      ),
+      body: Center(
+        child: Text('Ini adalah halaman notifikasi'),
+      ),
     );
   }
 }
