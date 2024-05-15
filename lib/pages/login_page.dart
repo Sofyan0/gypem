@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Username/Email',
+                        labelText: 'Email',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
