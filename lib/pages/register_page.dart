@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding_screen/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -38,12 +41,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _fetchProvinces() async {
     try {
-      final response = await http.get(Uri.parse('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json'));
+      final response = await http.get(Uri.parse(
+          'https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json'));
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
           _provinces = data;
-          _selectedProvince = _provinces.isNotEmpty ? _provinces[0]['id'].toString() : '';
+          _selectedProvince =
+              _provinces.isNotEmpty ? _provinces[0]['id'].toString() : '';
         });
         if (_selectedProvince.isNotEmpty) {
           _fetchCities(_selectedProvince);
@@ -58,7 +63,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _fetchCities(String provinceId) async {
     try {
-      final response = await http.get(Uri.parse('https://www.emsifa.com/api-wilayah-indonesia/api/regencies/$provinceId.json'));
+      final response = await http.get(Uri.parse(
+          'https://www.emsifa.com/api-wilayah-indonesia/api/regencies/$provinceId.json'));
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -184,7 +190,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: 'Tanggal Lahir (YYYY-MM-DD)',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText: _showErrors && _birthdateController.text.isEmpty ? 'Tanggal Lahir tidak boleh kosong' : null,
+                      errorText:
+                          _showErrors && _birthdateController.text.isEmpty
+                              ? 'Tanggal Lahir tidak boleh kosong'
+                              : null,
                     ),
                   ),
                 ),
@@ -196,7 +205,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   labelText: 'Nama Lengkap',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _fullNameController.text.isEmpty ? 'Nama Lengkap tidak boleh kosong' : null,
+                  errorText: _showErrors && _fullNameController.text.isEmpty
+                      ? 'Nama Lengkap tidak boleh kosong'
+                      : null,
                 ),
               ),
               SizedBox(height: 20.0),
@@ -206,7 +217,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   labelText: 'Nama Sekolah/Universitas',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _schoolController.text.isEmpty ? 'Nama Sekolah/Universitas tidak boleh kosong' : null,
+                  errorText: _showErrors && _schoolController.text.isEmpty
+                      ? 'Nama Sekolah/Universitas tidak boleh kosong'
+                      : null,
                 ),
               ),
               SizedBox(height: 20.0),
@@ -221,7 +234,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   labelText: 'Nomor Handphone',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _phoneNumberController.text.isEmpty ? 'Nomor Handphone tidak boleh kosong' : null,
+                  errorText: _showErrors && _phoneNumberController.text.isEmpty
+                      ? 'Nomor Handphone tidak boleh kosong'
+                      : null,
                 ),
               ),
               SizedBox(height: 20.0),
@@ -233,7 +248,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (_formKey.currentState!.validate()) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegisterCredentialsPage()),
+                      MaterialPageRoute(
+                          builder: (context) => RegisterCredentialsPage()),
                     );
                   }
                 },
@@ -250,19 +266,31 @@ class _RegisterPageState extends State<RegisterPage> {
 
 class RegisterCredentialsPage extends StatefulWidget {
   @override
-  _RegisterCredentialsPageState createState() => _RegisterCredentialsPageState();
+  _RegisterCredentialsPageState createState() =>
+      _RegisterCredentialsPageState();
 }
+
+final FirebaseAuthService _auth = FirebaseAuthService();
 
 class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   bool _showErrors = false;
 
   @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -283,7 +311,9 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   labelText: 'Username',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _usernameController.text.isEmpty ? 'Username tidak boleh kosong' : null,
+                  errorText: _showErrors && _usernameController.text.isEmpty
+                      ? 'Username tidak boleh kosong'
+                      : null,
                 ),
               ),
               SizedBox(height: 20.0),
@@ -294,7 +324,9 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _emailController.text.isEmpty ? 'Email tidak boleh kosong' : null,
+                  errorText: _showErrors && _emailController.text.isEmpty
+                      ? 'Email tidak boleh kosong'
+                      : null,
                 ),
               ),
               SizedBox(height: 10.0),
@@ -310,7 +342,9 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _passwordController.text.isEmpty ? 'Password tidak boleh kosong' : null,
+                  errorText: _showErrors && _passwordController.text.isEmpty
+                      ? 'Password tidak boleh kosong'
+                      : null,
                 ),
               ),
               SizedBox(height: 20.0),
@@ -321,7 +355,10 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   labelText: 'Konfirmasi Password',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _confirmPasswordController.text.isEmpty ? 'Konfirmasi Password tidak boleh kosong' : null,
+                  errorText:
+                      _showErrors && _confirmPasswordController.text.isEmpty
+                          ? 'Konfirmasi Password tidak boleh kosong'
+                          : null,
                 ),
               ),
               SizedBox(height: 10.0),
@@ -336,7 +373,8 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                     _showErrors = true;
                   });
                   if (_formKey.currentState!.validate() &&
-                      _passwordController.text == _confirmPasswordController.text) {
+                      _passwordController.text ==
+                          _confirmPasswordController.text) {
                     // Implement registration logic here
                   }
                 },
@@ -348,5 +386,21 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
       ),
       backgroundColor: Color.fromARGB(255, 200, 227, 249),
     );
+
+    void _signUp() async {
+      String username = _usernameController.text;
+      String email = _emailController.text;
+      String password = _passwordController.text;
+      String confirmPassword = _confirmPasswordController.text;
+
+      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+
+      // if (user! null){
+      //   print("User is successfully created");
+      //   Navigator.pushNamed(context, "/home");
+      // } else {
+      //   print("Some error happened");
+      // }
+    }
   }
 }
