@@ -65,7 +65,10 @@ class ProfilePage extends StatelessWidget {
                   icon: Icons.person,
                   text: 'Change Data Profile',
                   onTap: () {
-                    // Tambahkan aksi yang diinginkan
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangeProfilePage()),
+                    );
                   },
                 ),
                 ListItem(
@@ -176,6 +179,93 @@ class ListItem extends StatelessWidget {
       subtitle: subtitle != null ? Text(subtitle!) : null,
       trailing: Icon(Icons.arrow_forward),
       onTap: onTap,
+    );
+  }
+}
+
+class ChangeProfilePage extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController provinceController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Change Profile'),
+        backgroundColor: Colors.blue,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: AssetImage('assets/profile.jpg'), // Ganti dengan path gambar profil
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Nama Lengkap',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+                SizedBox(height: 16),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Institusi',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: provinceController,
+                decoration: InputDecoration(
+                  labelText: 'Provinsi',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: cityController,
+                decoration: InputDecoration(
+                  labelText: 'Kabupaten/Kota',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Nomor HP / Whatsapp',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Tambahkan aksi yang diinginkan
+                },
+                child: Text('Simpan Profile'),
+                style: ElevatedButton.styleFrom(primary: Colors.green),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
