@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart'; // Import halaman home_screen.dart
+import 'home_page.dart'; // Import halaman home_page.dart
 import 'register_page.dart'; // Import halaman register_page.dart
 
 void main() {
@@ -88,54 +88,25 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-  
-                  ),
-                  SizedBox(height: 10.0), // Jarak tambahan ke bawah
-                  // Text "Lupa Password?"
-                  GestureDetector(
-                    onTap: () {
-                      // Fungsi untuk lupa password
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Lupa Password?',
-                        style: TextStyle(color: Colors.blue, fontSize: 16.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                  // Login Button
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _usernameError = _usernameController.text.isEmpty;
-                        _passwordError = _passwordController.text.isEmpty;
-                      });
-
-                       if (!_usernameError && !_passwordError) {
-                        // Implement login functionality here
-
-                        // Navigasi ke halaman home_screen.dart
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 10.0), // Jarak tambahan ke bawah
                     // Text "Lupa Password?"
                     GestureDetector(
                       onTap: () {
-
+                        // Fungsi untuk lupa password
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPasswordPage()),
                         );
                       },
                       child: Container(
                         alignment: Alignment.centerRight,
                         child: Text(
                           'Lupa Password?',
-                          style: TextStyle(color: Colors.blue, fontSize: 16.0, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -200,6 +171,7 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Lupa Password?'),
         centerTitle: true,
       ),
       body: Center(
@@ -236,7 +208,8 @@ class ForgotPasswordPage extends StatelessWidget {
                   // Kirim email ke alamat yang dimasukkan
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => OtpVerificationPage()),
+                    MaterialPageRoute(
+                        builder: (context) => OtpVerificationPage()),
                   );
                 },
                 child: Text('Kirim'),
@@ -255,6 +228,7 @@ class OtpVerificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Verifikasi OTP'),
         centerTitle: true,
       ),
       body: Center(
@@ -324,6 +298,7 @@ class NewPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Password Baru'),
         centerTitle: true,
       ),
       body: Center(
@@ -375,7 +350,7 @@ class NewPasswordPage extends StatelessWidget {
                   // Tampilkan notifikasi berhasil
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Berhasil Disimpan'),
+                      content: Text('Berhasil disimpan'),
                     ),
                   );
                 },

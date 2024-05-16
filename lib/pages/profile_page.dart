@@ -260,7 +260,7 @@ class ChangeProfilePage extends StatelessWidget {
                   // Tambahkan aksi yang diinginkan
                 },
                 child: Text('Simpan Profile'),
-                style: ElevatedButton.styleFrom(primary: Colors.green),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
             ],
           ),
