@@ -81,34 +81,11 @@ class ProfilePage extends StatelessWidget {
                     );
                   },
                 ),
-                ListItem(
-                  icon: Icons.security,
-                  text: 'Keamanan akun',
-                  onTap: () {
-                    // Tambahkan aksi yang diinginkan
-                  },
-                ),
               ],
             ),
             Section(
               title: 'Bantuan',
               items: [
-                ListItem(
-                  icon: Icons.help,
-                  text: 'Bantuan',
-                  onTap: () {
-                    // Tambahkan aksi yang diinginkan
-                  },
-                  subtitle: 'Informasi lebih lanjut hubungi admin / bergabung grup',
-                ),
-                ListItem(
-                  icon: Icons.question_answer,
-                  text: 'FAQ',
-                  onTap: () {
-                    // Tambahkan aksi yang diinginkan
-                  },
-                  subtitle: 'Pertanyaan umum dan jawaban yang mungkin membantu',
-                ),
                 ListItem(
                   icon: Icons.share,
                   text: 'Sosial Media',
