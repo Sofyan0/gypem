@@ -270,7 +270,7 @@ class RegisterCredentialsPage extends StatefulWidget {
       _RegisterCredentialsPageState();
 }
 
-final FirebaseAuthService _auth = FirebaseAuthService();
+// final FirebaseAuthService _auth = FirebaseAuthService();
 
 class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
   final TextEditingController _usernameController = TextEditingController();
@@ -387,13 +387,13 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
       backgroundColor: Color.fromARGB(255, 200, 227, 249),
     );
 
-    void _signUp() async {
-      String username = _usernameController.text;
-      String email = _emailController.text;
-      String password = _passwordController.text;
-      String confirmPassword = _confirmPasswordController.text;
+    // void _signUp() async {
+    //   String username = _usernameController.text;
+    //   String email = _emailController.text;
+    //   String password = _passwordController.text;
+    //   String confirmPassword = _confirmPasswordController.text;
 
-      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+    //   User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
       // if (user! null){
       //   print("User is successfully created");
@@ -403,4 +403,3 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
       // }
     }
   }
-}
