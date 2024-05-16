@@ -19,86 +19,112 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          body(),
-          buildDots(),
-          button(),
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/Splas1.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Column(
+            children: [
+              body(),
+              buildDots(),
+              button(),
+            ],
+          ),
         ],
       ),
     );
   }
 
   //Body
-  Widget body(){
+  Widget body() {
     return Expanded(
       child: Center(
         child: PageView.builder(
-            onPageChanged: (value){
-              setState(() {
-                currentIndex = value;
-              });
-            },
-            itemCount: controller.items.length,
-            itemBuilder: (context,index){
-             return Padding(
-               padding: const EdgeInsets.symmetric(horizontal: 20),
-               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                   //Images
-                   Image.asset(controller.items[currentIndex].image),
+          onPageChanged: (value) {
+            setState(() {
+              currentIndex = value;
+            });
+          },
+          itemCount: controller.items.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //Images
+                  Image.asset(controller.items[currentIndex].image),
 
-                   const SizedBox(height: 15),
-                   //Titles
-                   Text(controller.items[currentIndex].title,
-                     style: const TextStyle(fontSize: 25,color: primaryColor,fontWeight: FontWeight.bold),
-                     textAlign: TextAlign.center,),
+                  const SizedBox(height: 15),
+                  //Titles
+                  Text(
+                    controller.items[currentIndex].title,
+                    style: const TextStyle(
+                      fontSize: 25,
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
 
-                   //Description
-                   Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: 25),
-                     child: Text(controller.items[currentIndex].description,
-                       style: const TextStyle(color: Colors.grey,fontSize: 16),textAlign: TextAlign.center,),
-                   ),
-
-                 ],
-               ),
-             );
-        }),
+                  //Description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Text(
+                      controller.items[currentIndex].description,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   //Dots
-  Widget buildDots(){
+  Widget buildDots() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(controller.items.length, (index) => AnimatedContainer(
+      children: List.generate(
+        controller.items.length,
+        (index) => AnimatedContainer(
           margin: const EdgeInsets.symmetric(horizontal: 2),
-          decoration:   BoxDecoration(
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: currentIndex == index? primaryColor : Colors.grey,
+            color: currentIndex == index ? primaryColor : Colors.grey,
           ),
           height: 7,
-          width: currentIndex == index? 30 : 7,
-          duration: const Duration(milliseconds: 700))),
+          width: currentIndex == index ? 30 : 7,
+          duration: const Duration(milliseconds: 700),
+        ),
+      ),
     );
   }
 
   //Button
-  Widget button(){
+  Widget button() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20),
-      width: MediaQuery.of(context).size.width *.9,
+      width: MediaQuery.of(context).size.width * .9,
       height: 55,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: primaryColor
+        color: primaryColor,
       ),
-
       child: TextButton(
-        onPressed: (){
+        onPressed: () {
           if (currentIndex == controller.items.length - 1) {
             // Jika tombol "Get started" ditekan pada halaman terakhir
             Navigator.push(
@@ -112,8 +138,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
             });
           }
         },
-        child: Text(currentIndex == controller.items.length -1? "Get started" : "Continue",
-          style: const TextStyle(color: Colors.white),),
+        child: Text(
+          currentIndex == controller.items.length - 1 ? "Get started" : "Continue",
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

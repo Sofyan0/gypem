@@ -21,28 +21,19 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Masuk'),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Masuk'),
+      //   centerTitle: true,
+      // ),
       body: Stack(
         children: [
-          // Background Color - Top (Biru)
+          // Background Image
           Positioned.fill(
-            top: 0,
-            child: Container(
-              color: Colors.blue,
-            ),
-          ),
-          // Background Image - Petir
-          Positioned.fill(
-            bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.blue, Colors.white],
+                image: DecorationImage(
+                  image: AssetImage('assets/images/login2.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -63,6 +54,8 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         labelText: 'Username/Email',
                         border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -80,6 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {

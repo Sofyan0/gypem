@@ -1,7 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_screen/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -103,163 +100,179 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Daftar'),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 20.0),
-              Text(
-                'Informasi Pribadi',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+      // appBar: AppBar(
+      //   title: Text('Daftar'),
+      //   centerTitle: true,
+      // ),
+      body: Stack(
+        children: [
+          // Background Image
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/login2.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 20.0),
-              DropdownButtonFormField<String>(
-                value: _selectedEducationLevel,
-                items: _educationLevels.map((String level) {
-                  return DropdownMenuItem<String>(
-                    value: level,
-                    child: Text(level),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedEducationLevel = value!;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'Tingkat Pendidikan',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              DropdownButtonFormField<String>(
-                value: _selectedProvince.isEmpty ? null : _selectedProvince,
-                items: _provinces.map((province) {
-                  return DropdownMenuItem<String>(
-                    value: province['id'].toString(),
-                    child: Text(province['name']),
-                  );
-                }).toList(),
-                onChanged: _updateCitiesDropdown,
-                decoration: InputDecoration(
-                  labelText: 'Provinsi',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              DropdownButtonFormField<String>(
-                value: _selectedCity.isEmpty ? null : _selectedCity,
-                items: _cities.map((city) {
-                  return DropdownMenuItem<String>(
-                    value: city['id'].toString(),
-                    child: Text(city['name']),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedCity = value!;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'Kabupaten/Kota',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              GestureDetector(
-                onTap: () {
-                  _selectDate(context);
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    controller: _birthdateController,
+            ),
+          ),
+          SingleChildScrollView(
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Informasi Pribadi',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  DropdownButtonFormField<String>(
+                    value: _selectedEducationLevel,
+                    items: _educationLevels.map((String level) {
+                      return DropdownMenuItem<String>(
+                        value: level,
+                        child: Text(level),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedEducationLevel = value!;
+                      });
+                    },
                     decoration: InputDecoration(
-                      labelText: 'Tanggal Lahir (YYYY-MM-DD)',
+                      labelText: 'Tingkat Pendidikan',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  DropdownButtonFormField<String>(
+                    value: _selectedProvince.isEmpty ? null : _selectedProvince,
+                    items: _provinces.map((province) {
+                      return DropdownMenuItem<String>(
+                        value: province['id'].toString(),
+                        child: Text(province['name']),
+                      );
+                    }).toList(),
+                    onChanged: _updateCitiesDropdown,
+                    decoration: InputDecoration(
+                      labelText: 'Provinsi',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  DropdownButtonFormField<String>(
+                    value: _selectedCity.isEmpty ? null : _selectedCity,
+                    items: _cities.map((city) {
+                      return DropdownMenuItem<String>(
+                        value: city['id'].toString(),
+                        child: Text(city['name']),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedCity = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Kabupaten/Kota',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  GestureDetector(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: _birthdateController,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Lahir (YYYY-MM-DD)',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.all(15.0),
+                          errorText:
+                              _showErrors && _birthdateController.text.isEmpty
+                                  ? 'Tanggal Lahir tidak boleh kosong'
+                                  : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _fullNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Nama Lengkap',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                      errorText: _showErrors && _fullNameController.text.isEmpty
+                          ? 'Nama Lengkap tidak boleh kosong'
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _schoolController,
+                    decoration: InputDecoration(
+                      labelText: 'Nama Sekolah/Universitas',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                      errorText: _showErrors && _schoolController.text.isEmpty
+                          ? 'Nama Sekolah/Universitas tidak boleh kosong'
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _phoneNumberController,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters
+                    : [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(13),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: 'Nomor Handphone',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
                       errorText:
-                          _showErrors && _birthdateController.text.isEmpty
-                              ? 'Tanggal Lahir tidak boleh kosong'
+                          _showErrors && _phoneNumberController.text.isEmpty
+                              ? 'Nomor Handphone tidak boleh kosong'
                               : null,
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _fullNameController,
-                decoration: InputDecoration(
-                  labelText: 'Nama Lengkap',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _fullNameController.text.isEmpty
-                      ? 'Nama Lengkap tidak boleh kosong'
-                      : null,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _schoolController,
-                decoration: InputDecoration(
-                  labelText: 'Nama Sekolah/Universitas',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _schoolController.text.isEmpty
-                      ? 'Nama Sekolah/Universitas tidak boleh kosong'
-                      : null,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _phoneNumberController,
-                keyboardType: TextInputType.phone,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(13),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _showErrors = true;
+                      });
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterCredentialsPage()),
+                        );
+                      }
+                    },
+                    child: Text('Selanjutnya'),
+                  ),
                 ],
-                decoration: InputDecoration(
-                  labelText: 'Nomor Handphone',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _phoneNumberController.text.isEmpty
-                      ? 'Nomor Handphone tidak boleh kosong'
-                      : null,
-                ),
               ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _showErrors = true;
-                  });
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterCredentialsPage()),
-                    );
-                  }
-                },
-                child: Text('Selanjutnya'),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
-      backgroundColor: Color.fromARGB(255, 200, 227, 249),
     );
   }
 }
@@ -297,94 +310,104 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
         title: Text('Daftar'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _usernameController.text.isEmpty
-                      ? 'Username tidak boleh kosong'
-                      : null,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _emailController.text.isEmpty
-                      ? 'Email tidak boleh kosong'
-                      : null,
-                ),
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                'Pastikan menggunakan email yang valid. Email yang digunakan untuk Login dan menerima notifikasi.',
-                style: TextStyle(fontSize: 14.0, color: Colors.grey),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText: _showErrors && _passwordController.text.isEmpty
-                      ? 'Password tidak boleh kosong'
-                      : null,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _confirmPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Konfirmasi Password',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(15.0),
-                  errorText:
-                      _showErrors && _confirmPasswordController.text.isEmpty
-                          ? 'Konfirmasi Password tidak boleh kosong'
-                          : null,
-                ),
-              ),
-              SizedBox(height: 10.0),
-              Text(
-                'Gunakan password yang mudah diingat, password digunakan untuk Login.',
-                style: TextStyle(fontSize: 14.0, color: Colors.grey),
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _showErrors = true;
-                  });
-                  if (_formKey.currentState!.validate() &&
-                      _passwordController.text ==
-                          _confirmPasswordController.text) {
-                    // Implement registration logic here
-                  }
-                },
-                child: Text('Daftar'),
-              ),
-            ],
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/login2.png',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
+          SingleChildScrollView(
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                      errorText: _showErrors && _usernameController.text.isEmpty
+                          ? 'Username tidak boleh kosong'
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                      errorText: _showErrors && _emailController.text.isEmpty
+                          ? 'Email tidak boleh kosong'
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    'Pastikan menggunakan email yang valid. Email yang digunakan untuk Login dan menerima notifikasi.',
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                      errorText: _showErrors && _passwordController.text.isEmpty
+                          ? 'Password tidak boleh kosong'
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Konfirmasi Password',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(15.0),
+                      errorText:
+                          _showErrors && _confirmPasswordController.text.isEmpty
+                              ? 'Konfirmasi Password tidak boleh kosong'
+                              : null,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    'Gunakan password yang mudah diingat, password digunakan untuk Login.',
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _showErrors = true;
+                      });
+                      if (_formKey.currentState!.validate() &&
+                          _passwordController.text ==
+                              _confirmPasswordController.text) {
+                        // Implement registration logic here
+                      }
+                    },
+                    child: Text('Daftar'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      backgroundColor: Color.fromARGB(255, 200, 227, 249),
+      // backgroundColor: Color.fromARGB(255, 200, 227, 249),
     );
 
     // void _signUp() async {
@@ -403,3 +426,4 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
       // }
     }
   }
+
