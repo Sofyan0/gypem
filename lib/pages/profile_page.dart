@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 void main() {
   runApp(ProfileApp());
@@ -163,12 +165,28 @@ class ListItem extends StatelessWidget {
   }
 }
 
-class ChangeProfilePage extends StatelessWidget {
+class ChangeProfilePage extends StatefulWidget {
+  @override
+  _ChangeProfilePageState createState() => _ChangeProfilePageState();
+}
+
+class _ChangeProfilePageState extends State<ChangeProfilePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController provinceController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,9 +200,12 @@ class ChangeProfilePage extends StatelessWidget {
           padding: EdgeInsets.all(16.0),
           child: Column(
             children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage: AssetImage('assets/profile.jpg'), // Ganti dengan path gambar profil
+              GestureDetector(
+                onTap: _pickImage,
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: _image != null ? FileImage(_image!) : AssetImage('assets/profile.jpg') as ImageProvider,
+                ),
               ),
               SizedBox(height: 20),
               TextFormField(
