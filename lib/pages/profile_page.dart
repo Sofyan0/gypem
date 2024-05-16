@@ -75,7 +75,10 @@ class ProfilePage extends StatelessWidget {
                   icon: Icons.lock,
                   text: 'Ubah Password',
                   onTap: () {
-                    // Tambahkan aksi yang diinginkan
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                    );
                   },
                 ),
                 ListItem(
@@ -222,7 +225,7 @@ class ChangeProfilePage extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
               ),
-                SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
@@ -264,6 +267,68 @@ class ChangeProfilePage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChangePasswordPage extends StatelessWidget {
+  final TextEditingController oldPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Ubah Password'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              'Silahkan perbarui password anda!',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: oldPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Password Lama',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            SizedBox(height: 16),
+            TextFormField(
+              controller: newPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Password Baru',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            SizedBox(height: 16),
+            TextFormField(
+              controller: confirmPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Ulangi Password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Tambahkan aksi yang diinginkan
+              },
+              child: Text('Simpan'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            ),
+          ],
         ),
       ),
     );
