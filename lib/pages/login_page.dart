@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                         _passwordError = _passwordController.text.isEmpty;
                       });
 
-                      if (!_usernameError && !_passwordError) {
+                       if (!_usernameError && !_passwordError) {
                         // Implement login functionality here
 
                         // Navigasi ke halaman home_screen.dart
