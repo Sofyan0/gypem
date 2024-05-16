@@ -375,7 +375,7 @@ class NewPasswordPage extends StatelessWidget {
                   // Tampilkan notifikasi berhasil
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Berhasil disimpan'),
+                      content: Text('Berhasil Disimpan'),
                     ),
                   );
                 },
