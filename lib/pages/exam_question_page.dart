@@ -149,7 +149,7 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
                             !isDoubtful[currentQuestionIndex];
                       });
                     },
-                    style: ElevatedButton.styleFrom(primary: Colors.yellow),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
                     child: Text(isDoubtful[currentQuestionIndex]
                         ? 'Hapus Ragu' // Jika sudah ragu, tampilkan opsi "Hapus Ragu"
                         : 'Ragu'), // Jika belum ragu, tampilkan opsi "Ragu"
