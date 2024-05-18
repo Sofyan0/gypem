@@ -11,27 +11,27 @@ class _EventPageState extends State<EventPage> {
   // Definisikan daftar acara dengan informasi lengkap
   List<Map<String, dynamic>> events = [
     {
-      'title': 'IFSO',
+      'title': 'NAMO #3',
       'time': 'SD-UNIVERSITAS',
       'image': 'assets/images/poster1.jpg',
     },
     {
-      'title': 'FUTSAL',
-      'time': 'SMP-SMA',
+      'title': 'IFSO',
+      'time': 'SD-UNIVERSITAS',
       'image': 'assets/images/poster2.jpg',
     },
     {
-      'title': 'BADMINTON',
-      'time': 'SMA',
+      'title': 'LOF #3',
+      'time': 'SD-UNIVERSITAS',
       'image': 'assets/images/poster3.jpg',
     },
     {
-      'title': 'SEPAK BOLA',
-      'time': 'UMUM',
+      'title': 'HARDIKNAS OLYMPIAD #2',
+      'time': 'SD-UNIVERSITAS',
       'image': 'assets/images/poster4.jpg',
     },
     {
-      'title': 'BASKET BALL',
+      'title': 'NAMO #3',
       'time': 'SMA-UNIVERSITAS',
       'image': 'assets/images/poster1.jpg',
     },
