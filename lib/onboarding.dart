@@ -5,7 +5,7 @@ import 'package:flutter_onboarding_screen/Components/onboarding_data.dart';
 import 'package:flutter_onboarding_screen/pages/login_page.dart'; // (1) Impor halaman home_screen.dart
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({super.key});
+  const OnboardingPage({Key? key});
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
@@ -15,7 +15,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final controller = OnboardingData();
   final pageController = PageController();
   int currentIndex = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,32 +115,35 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   //Button
   Widget button() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      width: MediaQuery.of(context).size.width * .9,
-      height: 55,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: primaryColor,
-      ),
-      child: TextButton(
-        onPressed: () {
-          if (currentIndex == controller.items.length - 1) {
-            // Jika tombol "Get started" ditekan pada halaman terakhir
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()), // (2) Pindahkan ke halaman home_screen.dart
-            );
-          } else {
-            // Jika tombol "Continue" ditekan
-            setState(() {
-              currentIndex++; // Pindah ke halaman berikutnya
-            });
-          }
-        },
-        child: Text(
-          currentIndex == controller.items.length - 1 ? "Get started" : "Continue",
-          style: const TextStyle(color: Colors.white),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        margin: const EdgeInsets.only(top: 50),
+        width: MediaQuery.of(context).size.width * .9,
+        height: 55,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: primaryColor,
+        ),
+        child: TextButton(
+          onPressed: () {
+            if (currentIndex == controller.items.length - 1) {
+              // Jika tombol "Get started" ditekan pada halaman terakhir
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()), // (2) Pindahkan ke halaman home_screen.dart
+              );
+            } else {
+              // Jika tombol "Continue" ditekan
+              setState(() {
+                currentIndex++; // Pindah ke halaman berikutnya
+              });
+            }
+          },
+          child: Text(
+            currentIndex == controller.items.length - 1 ? "Get started" : "Continue",
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );
