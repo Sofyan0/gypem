@@ -195,7 +195,7 @@ class HomePageContent extends StatelessWidget {
               return Container(
                 width: 160,
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                color:Colors.white,
+                color: Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -221,7 +221,7 @@ class HomePageContent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height:10),
+        SizedBox(height: 10),
         Container(
           height: 500,
           child: ListView.builder(
@@ -317,7 +317,6 @@ class HomePageContent extends StatelessWidget {
     );
   }
 }
-
 class BeritaTerkiniPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
