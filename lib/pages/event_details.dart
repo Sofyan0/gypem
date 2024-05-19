@@ -28,7 +28,15 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/event_details');
+            Navigator.pushNamed(
+              context,
+              '/event_details',
+              arguments: EventDetailsArguments(
+                title: 'Event Title',
+                description: 'This is the event description.',
+                image: 'assets/images/event_image.jpg',
+              ),
+            );
           },
           child: Text('Go to Event Details'),
         ),
@@ -40,13 +48,49 @@ class HomePage extends StatelessWidget {
 class EventDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final EventDetailsArguments args =
+        ModalRoute.of(context)!.settings.arguments as EventDetailsArguments;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Details'),
+        title: Text(args.title),
       ),
-      body: Center(
-        child: Text('This is the Event Details Page'),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(args.image),
+            SizedBox(height: 20),
+            Text(
+              args.title,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              args.description,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+class EventDetailsArguments {
+  final String title;
+  final String description;
+  final String image;
+
+  EventDetailsArguments({
+    required this.title,
+    required this.description,
+    required this.image,
+  });
 }

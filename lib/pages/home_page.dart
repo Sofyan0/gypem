@@ -242,7 +242,7 @@ class HomePageContent extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Container(
-          height: 500,
+                    height: 500,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: eventOlimpiadeImages.length,
@@ -302,10 +302,18 @@ class HomePageContent extends StatelessWidget {
                             SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(context, '/event_details');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/event_details',
+                                  arguments: EventDetailsArguments(
+                                    title: 'Event ${index + 1}',
+                                    description: eventOlimpiadeTexts[index],
+                                    image: eventOlimpiadeImages[index],
+                                  ),
+                                );
                               },
                               child: Text(
-                                "Selengkapnya",
+                                "Ikuti Event",
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.blue,
@@ -328,7 +336,6 @@ class HomePageContent extends StatelessWidget {
   }
 }
 
-// Widget untuk halaman berita_terkini
 class BeritaTerkiniPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -343,3 +350,52 @@ class BeritaTerkiniPage extends StatelessWidget {
   }
 }
 
+class EventDetailsArguments {
+  final String title;
+  final String description;
+  final String image;
+
+  EventDetailsArguments({
+    required this.title,
+    required this.description,
+    required this.image,
+  });
+}
+
+class EventDetailsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final EventDetailsArguments args =
+        ModalRoute.of(context)!.settings.arguments as EventDetailsArguments;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(args.title),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(args.image),
+            SizedBox(height: 20),
+            Text(
+              args.title,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              args.description,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
