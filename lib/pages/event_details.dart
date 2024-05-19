@@ -82,7 +82,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       },
                       child: Text('Daftar'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
+                        backgroundColor: Colors.blue,
                         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         textStyle: TextStyle(
                           fontSize: 18,

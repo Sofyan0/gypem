@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class EventPage extends StatefulWidget {
   @override
@@ -6,146 +8,43 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-  TextEditingController _searchController = TextEditingController();
-  
-  // Definisikan daftar acara dengan informasi lengkap
-  List<Map<String, dynamic>> events = [
-    {
-      'title': 'NAMO #3',
-      'time': 'SD-UNIVERSITAS',
-      'image': 'assets/images/poster1.jpg',
-    },
-    {
-      'title': 'IFSO',
-      'time': 'SD-UNIVERSITAS',
-      'image': 'assets/images/poster2.jpg',
-    },
-    {
-      'title': 'LOF #3',
-      'time': 'SD-UNIVERSITAS',
-      'image': 'assets/images/poster3.jpg',
-    },
-    {
-      'title': 'HARDIKNAS OLYMPIAD #2',
-      'time': 'SD-UNIVERSITAS',
-      'image': 'assets/images/poster4.jpg',
-    },
-    {
-      'title': 'NAMO #3',
-      'time': 'SMA-UNIVERSITAS',
-      'image': 'assets/images/poster1.jpg',
-    },
-  ];
-  List<Map<String, dynamic>> filteredEvents = [];
+  String _status = "Belum Mendaftar";
 
   @override
   void initState() {
     super.initState();
-    filteredEvents = List.from(events);
+    _loadStatus();
+  }
+
+  void _loadStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _status = prefs.getString('status') ?? "Belum Mendaftar";
+    });
+
+    if (_status == "Validasi Berhasil") {
+      _startValidationTimer();
+    }
+  }
+
+  void _startValidationTimer() {
+    Future.delayed(Duration(hours: 1), () async {
+      final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _status = "Kerjakan";
+      });
+      await prefs.setString('status', "Kerjakan");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Event Polije'),
-      // ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  filteredEvents = events.where((event) {
-                    return event['title']
-                        .toLowerCase()
-                        .contains(value.toLowerCase());
-                  }).toList();
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Search',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  'Event Polije',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(width: 16), // Spasi antara teks dan ikon pencarian
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredEvents.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _buildEventItem(context, filteredEvents[index]);
-              },
-            ),
-          ),
-        ],
+      appBar: AppBar(
+        title: Text('Event Page'),
       ),
-    );
-  }
-
-  Widget _buildEventItem(BuildContext context, Map<String, dynamic> event) {
-    String title = event['title'];
-    String time = event['time'];
-    String image = event['image'];
-
-    return Card(
-      margin: EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 200, // Sesuaikan tinggi sesuai kebutuhan Anda
-            color: Colors.grey, // Ganti dengan warna latar belakang yang sesuai
-            child: Center(
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-            ),
-          ),
-          ListTile(
-            title: Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Text(
-              time,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            onTap: () {
-              // Tambahkan logika navigasi ke halaman detail event di sini
-            },
-          ),
-        ],
+      body: Center(
+        child: Text('Status: $_status'),
       ),
     );
   }

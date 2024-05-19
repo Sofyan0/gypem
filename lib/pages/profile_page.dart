@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        // title: Text('Profile'),
         backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(

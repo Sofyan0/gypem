@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_onboarding_screen/pages/event_details.dart';
 import 'package:flutter_onboarding_screen/pages/event_page.dart';
 import 'package:flutter_onboarding_screen/pages/history_page.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  bool isRegistered = false;
 
   static List<Widget> _widgetOptions = <Widget>[
     HomePageContent(),
@@ -21,17 +23,37 @@ class _HomePageState extends State<HomePage> {
     ProfilePage(),
   ];
 
-  void _onItemTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _checkRegistrationStatus();
+  }
+
+  void _checkRegistrationStatus() async {
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedIndex = index;
+      isRegistered = prefs.getBool('isRegistered') ?? false;
     });
+  }
+
+  void _onItemTapped(int index) {
+    if (index == 1 && !isRegistered) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Silakan daftar terlebih dahulu.'),
+        ),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -201,12 +223,18 @@ class HomePageContent extends StatelessWidget {
                   children: [
                     Image.asset(
                       beritaTerkiniImages[index],
+                      width: 160, // Adjust width to fit container
+                      height: 120, // Adjust height to fit container
+                      fit: BoxFit.cover,
                       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                         return Text('Gagal memuat gambar');
                       },
                     ),
                     SizedBox(height: 10),
-                    Text(beritaTerkiniTexts[index]),
+                    Text(
+                      beritaTerkiniTexts[index],
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               );
@@ -214,11 +242,14 @@ class HomePageContent extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        Text(
-          "Event Olimpiade",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            "Event Olimpiade",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         SizedBox(height: 10),
@@ -317,6 +348,7 @@ class HomePageContent extends StatelessWidget {
     );
   }
 }
+
 class BeritaTerkiniPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
