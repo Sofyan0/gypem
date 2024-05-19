@@ -12,6 +12,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Definisikan variabel untuk argumen EventDetailsPage
+    final String title = 'Event Title';
+    final String description = 'This is the event description.';
+    final String image = 'assets/images/event_image.jpg';
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -20,7 +25,11 @@ class MyApp extends StatelessWidget {
       ),
       home: OnboardingPage(),
       routes: {
-        '/event_details': (context) => EventDetails.EventDetailsPage(), // Menggunakan nama yang benar dengan menggunakan alias
+        '/event_details': (context) => EventDetails.EventDetailsPage(
+              title: title,
+              description: description,
+              image: image,
+            ), // Menggunakan nama yang benar dengan menggunakan alias
       },
       debugShowCheckedModeBanner: false,
     );

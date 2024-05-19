@@ -1,29 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/pages/event_details.dart';
-import 'package:flutter_onboarding_screen/pages/notifikasi_page.dart';
-import 'event_page.dart';
-import 'history_page.dart';
-import 'profile_page.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My App',
-      routes: {
-        '/': (context) => HomePage(),
-        '/notifications': (context) => NotifikasiPage(),
-        '/event_details': (context) => EventDetailsPage(),
-        '/berita_terkini': (context) => BeritaTerkiniPage(), // Tambahkan rute untuk halaman berita_terkini
-      },
-      initialRoute: '/',
-    );
-  }
-}
+import 'package:flutter_onboarding_screen/pages/event_page.dart';
+import 'package:flutter_onboarding_screen/pages/history_page.dart';
+import 'package:flutter_onboarding_screen/pages/profile_page.dart';
+import 'event_details_arguments.dart'; // Import EventDetailsArguments
+import 'event_details.dart'; // Import EventDetailsPage
 
 class HomePage extends StatefulWidget {
   @override
@@ -214,7 +195,7 @@ class HomePageContent extends StatelessWidget {
               return Container(
                 width: 160,
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                color: Colors.white,
+                color:Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -240,9 +221,9 @@ class HomePageContent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height:10),
         Container(
-                    height: 500,
+          height: 500,
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: eventOlimpiadeImages.length,
@@ -302,13 +283,14 @@ class HomePageContent extends StatelessWidget {
                             SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(
+                                Navigator.push(
                                   context,
-                                  '/event_details',
-                                  arguments: EventDetailsArguments(
-                                    title: 'Event ${index + 1}',
-                                    description: eventOlimpiadeTexts[index],
-                                    image: eventOlimpiadeImages[index],
+                                  MaterialPageRoute(
+                                    builder: (context) => EventDetailsPage(
+                                      title: 'Event ${index + 1}',
+                                      description: eventOlimpiadeTexts[index],
+                                      image: eventOlimpiadeImages[index],
+                                    ),
                                   ),
                                 );
                               },
@@ -345,56 +327,6 @@ class BeritaTerkiniPage extends StatelessWidget {
       ),
       body: Center(
         child: Text('Halaman Berita Terkini'),
-      ),
-    );
-  }
-}
-
-class EventDetailsArguments {
-  final String title;
-  final String description;
-  final String image;
-
-  EventDetailsArguments({
-    required this.title,
-    required this.description,
-    required this.image,
-  });
-}
-
-class EventDetailsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final EventDetailsArguments args =
-        ModalRoute.of(context)!.settings.arguments as EventDetailsArguments;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(args.title),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(args.image),
-            SizedBox(height: 20),
-            Text(
-              args.title,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              args.description,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

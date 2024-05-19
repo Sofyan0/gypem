@@ -1,69 +1,28 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My App',
-      routes: {
-        '/': (context) => HomePage(),
-        '/event_details': (context) => EventDetailsPage(),
-      },
-      initialRoute: '/',
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(
-              context,
-              '/event_details',
-              arguments: EventDetailsArguments(
-                title: 'Event Title',
-                description: 'This is the event description.',
-                image: 'assets/images/event_image.jpg',
-              ),
-            );
-          },
-          child: Text('Go to Event Details'),
-        ),
-      ),
-    );
-  }
-}
+import 'event_details_arguments.dart';
 
 class EventDetailsPage extends StatelessWidget {
+  final String title;
+  final String description;
+  final String image;
+
+  EventDetailsPage({required this.title, required this.description, required this.image});
+
   @override
   Widget build(BuildContext context) {
-    final EventDetailsArguments args =
-        ModalRoute.of(context)!.settings.arguments as EventDetailsArguments;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(args.title),
+        title: Text(title),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(args.image),
+            Image.asset(image),
             SizedBox(height: 20),
             Text(
-              args.title,
+              title,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -71,7 +30,7 @@ class EventDetailsPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              args.description,
+              description,
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -81,16 +40,4 @@ class EventDetailsPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class EventDetailsArguments {
-  final String title;
-  final String description;
-  final String image;
-
-  EventDetailsArguments({
-    required this.title,
-    required this.description,
-    required this.image,
-  });
 }
