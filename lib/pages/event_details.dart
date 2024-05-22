@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'agreement_page.dart'; // Tambahkan import untuk halaman persetujuan
+import 'package:shared_preferences/shared_preferences.dart';
+import 'agreement_page.dart'; // Import AgreementPage
+import 'event_page.dart'; // Import EventPage
 
 class EventDetailsPage extends StatefulWidget {
   final String title;
@@ -72,12 +74,21 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     child: ElevatedButton(
                       onPressed: () async {
                         bool? result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => AgreementPage(),
+                        MaterialPageRoute(
+                          builder: (context) => AgreementPage(
+                            eventTitle: 'Judul Event',
+                            eventDescription: 'Deskripsi Event',
+                            eventImage: 'assets/images/event_image.jpg',
                           ),
-                        );
+                        ),
+                      );
                         if (result == true) {
                           _register();
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => EventPage(),
+                            ),
+                          );
                         }
                       },
                       child: Text('Daftar'),
@@ -100,10 +111,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     );
   }
 
-  void _register() {
+  void _register() async {
     setState(() {
       isRegistered = true;
     });
+
+    // Save registration status in shared preferences
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isRegistered', true);
 
     // Simulate admin validation process
     Future.delayed(Duration(seconds: 5), () {

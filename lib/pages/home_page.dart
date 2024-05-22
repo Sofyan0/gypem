@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_onboarding_screen/pages/event_details.dart';
+import 'package:flutter_onboarding_screen/pages/beritagypem_page.dart';
+import 'package:flutter_onboarding_screen/pages/beritaolimp_page.dart';
+import 'package:flutter_onboarding_screen/pages/beritatesti_page.dart';
 import 'package:flutter_onboarding_screen/pages/event_page.dart';
 import 'package:flutter_onboarding_screen/pages/history_page.dart';
 import 'package:flutter_onboarding_screen/pages/profile_page.dart';
-import 'event_details_arguments.dart'; // Import EventDetailsArguments
-import 'event_details.dart'; // Import EventDetailsPage
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,18 +37,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onItemTapped(int index) {
-    if (index == 1 && !isRegistered) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Silakan daftar terlebih dahulu.'),
-        ),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+  // Langsung pindah ke halaman Event tanpa periksa status pendaftaran
+  if (index == 1) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EventPage(),
+      ),
+    );
+  } else {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,35 +98,27 @@ class _HomePageState extends State<HomePage> {
 
 class HomePageContent extends StatelessWidget {
   final List<String> beritaTerkiniImages = [
-    'assets/images/poster1.jpg',
-    'assets/images/poster2.jpg',
-    'assets/images/poster3.jpg',
-    'assets/images/poster4.jpg',
-    'assets/images/poster1.jpg',
+    'assets/images/logo.png',
+    'assets/images/learn.jpg',
+    'assets/images/testimoni.jpg',
   ];
 
   final List<String> beritaTerkiniTexts = [
-    'Berita mengenai Olimpiade Matematika.',
-    'Berita mengenai Olimpiade Fisika.',
-    'Berita mengenai Olimpiade Kimia.',
-    'Berita mengenai Olimpiade Biologi.',
-    'Berita mengenai Olimpiade Astronomi.',
+    'Berita mengenai GYPEM INDONESIA.',
+    'Berita mengenai Olimpiade GYPEM.',
+    'Berita mengenai Testimoni.',
   ];
 
   final List<String> eventOlimpiadeImages = [
     'assets/images/poster4.jpg',
     'assets/images/poster3.jpg',
     'assets/images/poster2.jpg',
-    'assets/images/poster1.jpg',
-    'assets/images/poster4.jpg',
   ];
 
   final List<String> eventOlimpiadeTexts = [
-    'SD - Universitas 24 September 2024.',
-    'Event Olimpiade Nasional Fisika diadakan untuk menguji kemampuan peserta dalam bidang fisika.',
-    'Event Olimpiade Nasional Kimia mengundang para ahli kimia muda untuk bersaing dalam pengetahuan dan keterampilan mereka.',
-    'Event Olimpiade Nasional Biologi bertujuan untuk mencari talenta muda dalam bidang biologi.',
-    'Event Olimpiade Nasional Astronomi mengajak peserta untuk menjelajahi keajaiban alam semesta.',
+    'HARDIKNAS OLYMPIAD #2.',
+    'LANGUAGE OLYMPIAD FESTIVAL #3.',
+    'INDONESIAN FUTURE SCIENCE OLYMPIAD.',
   ];
 
   @override
@@ -214,28 +209,54 @@ class HomePageContent extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: beritaTerkiniImages.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                width: 160,
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      beritaTerkiniImages[index],
-                      width: 160, // Adjust width to fit container
-                      height: 120, // Adjust height to fit container
-                      fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                        return Text('Gagal memuat gambar');
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      beritaTerkiniTexts[index],
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+              return GestureDetector(
+                onTap: () {
+                  if (index == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BeritaGypemIndonesiaPage(),
+                      ),
+                    );
+                  } else if (index == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BeritaOlimpiadeGypemPage(),
+                      ),
+                    );
+                  } else if (index == 2) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute (
+                        builder: (context) => BeritaTestimoniPage(),
+                      ),
+                    );
+                  }
+                },
+                child: Container(
+                  width: 160,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        beritaTerkiniImages[index],
+                        width: 160,
+                        height: 120,
+                        fit: BoxFit.cover,
+                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                          return Text('Gagal memuat gambar');
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        beritaTerkiniTexts[index],
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -252,7 +273,9 @@ class HomePageContent extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(
+          height: 10,
+        ),
         Container(
           height: 500,
           child: ListView.builder(
@@ -314,25 +337,22 @@ class HomePageContent extends StatelessWidget {
                             SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
+                                // Pindahkan pengguna ke halaman event_page ketika card event diklik
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => EventDetailsPage(
-                                      title: 'Event ${index + 1}',
-                                      description: eventOlimpiadeTexts[index],
-                                      image: eventOlimpiadeImages[index],
-                                    ),
+                                    builder: (context) => EventPage(),
                                   ),
                                 );
                               },
-                              child: Text(
-                                "Ikuti Event",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
+                              // child: Text(
+                              //   "Ikuti Event",
+                              //   style: TextStyle(
+                              //     fontSize: 14,
+                              //     color: Colors.blue,
+                              //     decoration: TextDecoration.underline,
+                              //   ),
+                              // ),
                             ),
                           ],
                         ),
