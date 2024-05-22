@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
+import 'login_page.dart'; // Import halaman login_page.dart
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -10,12 +12,47 @@ class ProfileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ProfilePage(),
+      home: LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          },
+          child: Text('Login'),
+        ),
+      ),
     );
   }
 }
 
 class ProfilePage extends StatelessWidget {
+  void _logout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('isLoggedIn');
+    await prefs.remove('username');
+    // Remove other user details as needed
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +147,12 @@ class ProfilePage extends StatelessWidget {
                   subtitle: 'claim certificate yang telah anda kerjakan',
                 ),
               ],
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _logout(context),
+              child: Text('Logout'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             ),
           ],
         ),
@@ -313,7 +356,7 @@ class ChangePasswordPage extends StatelessWidget {
             TextFormField(
               controller: confirmPasswordController,
               decoration: InputDecoration(
-                labelText: 'Ulangi Password',
+                labelText: 'Konfirmasi Password',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
@@ -323,7 +366,7 @@ class ChangePasswordPage extends StatelessWidget {
               onPressed: () {
                 // Tambahkan aksi yang diinginkan
               },
-              child: Text('Simpan'),
+              child: Text('Simpan Password'),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             ),
           ],
