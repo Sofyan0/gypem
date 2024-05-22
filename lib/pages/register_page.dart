@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding_screen/pages/login_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: RegisterPage(),
+    home: LoginPage(),
   ));
 }
+
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -28,7 +30,6 @@ class _RegisterPageState extends State<RegisterPage> {
   List<dynamic> _provinces = [];
   String _selectedCity = '';
   List<dynamic> _cities = [];
-  bool _showErrors = false;
 
   @override
   void initState() {
@@ -100,10 +101,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Daftar'),
-      //   centerTitle: true,
-      // ),
       body: Stack(
         children: [
           // Background Image
@@ -124,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 350.0),
                   Text(
                     'Informasi Pribadi',
                     style: TextStyle(
@@ -167,6 +164,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Provinsi tidak boleh kosong';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20.0),
                   DropdownButtonFormField<String>(
@@ -187,6 +190,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Kabupaten/Kota tidak boleh kosong';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20.0),
                   GestureDetector(
@@ -200,11 +209,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           labelText: 'Tanggal Lahir (YYYY-MM-DD)',
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.all(15.0),
-                          errorText:
-                              _showErrors && _birthdateController.text.isEmpty
-                                  ? 'Tanggal Lahir tidak boleh kosong'
-                                  : null,
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Tanggal Lahir tidak boleh kosong';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ),
@@ -215,10 +226,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: 'Nama Lengkap',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText: _showErrors && _fullNameController.text.isEmpty
-                          ? 'Nama Lengkap tidak boleh kosong'
-                          : null,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nama Lengkap tidak boleh kosong';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20.0),
                   TextFormField(
@@ -227,17 +241,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: 'Nama Sekolah/Universitas',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText: _showErrors && _schoolController.text.isEmpty
-                          ? 'Nama Sekolah/Universitas tidak boleh kosong'
-                          : null,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nama Sekolah/Universitas tidak boleh kosong';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20.0),
                   TextFormField(
                     controller: _phoneNumberController,
                     keyboardType: TextInputType.phone,
-                    inputFormatters
-                    : [
+                    inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(13),
                     ],
@@ -245,23 +261,31 @@ class _RegisterPageState extends State<RegisterPage> {
                       labelText: 'Nomor Handphone',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText:
-                          _showErrors && _phoneNumberController.text.isEmpty
-                              ? 'Nomor Handphone tidak boleh kosong'
-                              : null,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nomor Handphone tidak boleh kosong';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        _showErrors = true;
-                      });
                       if (_formKey.currentState!.validate()) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterCredentialsPage()),
+                            builder: (context) => RegisterCredentialsPage(
+                              fullName: _fullNameController.text,
+                              school: _schoolController.text,
+                              birthdate: _birthdateController.text,
+                              phoneNumber: _phoneNumberController.text,
+                              educationLevel: _selectedEducationLevel,
+                              province: _selectedProvince,
+                              city: _selectedCity,
+                            ),
+                          ),
                         );
                       }
                     },
@@ -278,12 +302,28 @@ class _RegisterPageState extends State<RegisterPage> {
 }
 
 class RegisterCredentialsPage extends StatefulWidget {
+  final String fullName;
+  final String school;
+  final String birthdate;
+  final String phoneNumber;
+  final String educationLevel;
+  final String province;
+  final String city;
+
+  RegisterCredentialsPage({
+    required this.fullName,
+    required this.school,
+    required this.birthdate,
+    required this.phoneNumber,
+    required this.educationLevel,
+    required this.province,
+    required this.city,
+  });
+
   @override
   _RegisterCredentialsPageState createState() =>
       _RegisterCredentialsPageState();
 }
-
-// final FirebaseAuthService _auth = FirebaseAuthService();
 
 class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
   final TextEditingController _usernameController = TextEditingController();
@@ -295,6 +335,95 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
   final _formKey = GlobalKey<FormState>();
   bool _showErrors = false;
 
+  Future<void> _register() async {
+    setState(() {
+      _showErrors = true;
+    });
+
+    if (_formKey.currentState!.validate() &&
+        _passwordController.text == _confirmPasswordController.text) {
+      try {
+        final response = await http.post(
+          Uri.parse('http://192.168.1.44/ApiFlutter/register.php'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'tingkat_pendidikan': widget.educationLevel,
+            'provinsi': widget.province,
+            'kabupaten_kota': widget.city,
+            'nama_sekolah_universitas': widget.school,
+            'name': widget.fullName,
+            'tanggal_lahir': widget.birthdate,
+            'no_telpon': widget.phoneNumber,
+            'username': _usernameController.text,
+            'email': _emailController.text,
+            'password': _passwordController.text,
+          }),
+        );
+
+        final data = json.decode(response.body);
+        if (response.statusCode == 200 && data['message'] == 'Registrasi berhasil') {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Success'),
+                content: Text('Registrasi berhasil!'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Error'),
+                content: Text('Registrasi gagal. Silakan coba lagi.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Terjadi kesalahan. Silakan coba lagi.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -304,18 +433,20 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Daftar'),
-        centerTitle: true,
-      ),
       body: Stack(
         children: [
+          // Background Image
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/login2.png',
-              fit: BoxFit.cover,
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/login2.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
           SingleChildScrollView(
@@ -325,7 +456,7 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 500.0),
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
@@ -376,10 +507,10 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                       labelText: 'Konfirmasi Password',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText:
-                          _showErrors && _confirmPasswordController.text.isEmpty
-                              ? 'Konfirmasi Password tidak boleh kosong'
-                              : null,
+                      errorText: _showErrors &&
+                              _confirmPasswordController.text.isEmpty
+                          ? 'Konfirmasi Password tidak boleh kosong'
+                          : null,
                     ),
                   ),
                   SizedBox(height: 10.0),
@@ -389,16 +520,7 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   ),
                   SizedBox(height: 20.0),
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _showErrors = true;
-                      });
-                      if (_formKey.currentState!.validate() &&
-                          _passwordController.text ==
-                              _confirmPasswordController.text) {
-                        // Implement registration logic here
-                      }
-                    },
+                    onPressed: _register,
                     child: Text('Daftar'),
                   ),
                 ],
@@ -406,24 +528,7 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
             ),
           ),
         ],
-      ),
-      // backgroundColor: Color.fromARGB(255, 200, 227, 249),
-    );
-
-    // void _signUp() async {
-    //   String username = _usernameController.text;
-    //   String email = _emailController.text;
-    //   String password = _passwordController.text;
-    //   String confirmPassword = _confirmPasswordController.text;
-
-    //   User? user = await _auth.signUpWithEmailAndPassword(email, password);
-
-      // if (user! null){
-      //   print("User is successfully created");
-      //   Navigator.pushNamed(context, "/home");
-      // } else {
-      //   print("Some error happened");
-      // }
-    }
-  }
-
+     ),
+);
+}
+}

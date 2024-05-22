@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/Components/color.dart';
 import 'package:flutter_onboarding_screen/Components/onboarding_data.dart';
-// import 'package:flutter_onboarding_screen/Screens/home_screen.dart';
-import 'package:flutter_onboarding_screen/pages/login_page.dart'; // (1) Impor halaman home_screen.dart
+import 'package:flutter_onboarding_screen/pages/login_page.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key});
@@ -31,7 +30,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           Column(
             children: [
               body(),
-              buildDots(),
+              buildDots(),  // Move buildDots here for dots between body and button
               button(),
             ],
           ),
@@ -40,11 +39,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  //Body
+  // Body
   Widget body() {
     return Expanded(
       child: Center(
         child: PageView.builder(
+          controller: pageController,
           onPageChanged: (value) {
             setState(() {
               currentIndex = value;
@@ -57,11 +57,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  //Images
+                  // Images
                   Image.asset(controller.items[currentIndex].image),
-
                   const SizedBox(height: 15),
-                  //Titles
+                  // Titles
                   Text(
                     controller.items[currentIndex].title,
                     style: const TextStyle(
@@ -71,8 +70,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
-                  //Description
+                  // Description
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Text(
@@ -93,32 +91,35 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  //Dots
+  // Dots
   Widget buildDots() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        controller.items.length,
-        (index) => AnimatedContainer(
-          margin: const EdgeInsets.symmetric(horizontal: 2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: currentIndex == index ? primaryColor : Colors.grey,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),  // Add some bottom padding if needed
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          controller.items.length,
+          (index) => AnimatedContainer(
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: currentIndex == index ? primaryColor : Colors.grey,
+            ),
+            height: 7,
+            width: currentIndex == index ? 30 : 7,
+            duration: const Duration(milliseconds: 300),
           ),
-          height: 7,
-          width: currentIndex == index ? 30 : 7,
-          duration: const Duration(milliseconds: 700),
         ),
       ),
     );
   }
 
-  //Button
+  // Button
   Widget button() {
     return Align(
-      alignment: Alignment.topCenter,
+      alignment: Alignment.bottomCenter,
       child: Container(
-        margin: const EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.only(bottom: 50),  // Add margin to the bottom
         width: MediaQuery.of(context).size.width * .9,
         height: 55,
         decoration: BoxDecoration(
@@ -128,16 +129,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: TextButton(
           onPressed: () {
             if (currentIndex == controller.items.length - 1) {
-              // Jika tombol "Get started" ditekan pada halaman terakhir
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage()), // (2) Pindahkan ke halaman home_screen.dart
+                MaterialPageRoute(builder: (context) => LoginPage()),
               );
             } else {
-              // Jika tombol "Continue" ditekan
-              setState(() {
-                currentIndex++; // Pindah ke halaman berikutnya
-              });
+              pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn,
+              );
             }
           },
           child: Text(
