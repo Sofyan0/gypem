@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -20,6 +23,18 @@ class _HistoryPageState extends State<HistoryPage> {
     'Item 10',
   ];
   List<String> _filteredItems = [];
+  List<String> _imageAssets = [
+    'assets/images/poster1.jpg',
+    'assets/images/poster2.jpg',
+    'assets/images/poster3.jpg',
+    'assets/images/poster4.jpg',
+    'assets/images/poster5.jpg',
+    'assets/images/poster6.jpg',
+    'assets/images/poster7.jpg',
+    'assets/images/poster8.jpg',
+    'assets/images/poster9.jpg',
+    'assets/images/poster10.jpg',
+  ];
 
   @override
   void initState() {
@@ -49,12 +64,46 @@ class _HistoryPageState extends State<HistoryPage> {
     }
   }
 
+  Future<void> _downloadImage(String itemName) async {
+    // Ambil indeks item yang sesuai dengan nama item
+    int index = _historyItems.indexOf(itemName);
+    
+    // Dapatkan direktori penyimpanan eksternal pada perangkat
+    Directory? appExternalStorageDirectory = await getExternalStorageDirectory();
+    String? externalStoragePath = appExternalStorageDirectory?.path;
+
+    if (externalStoragePath != null) {
+      // Buat path untuk menyimpan file gambar JPG
+      String imagePath = '$externalStoragePath/$itemName.jpg';
+
+      // Salin file gambar dari assets ke penyimpanan eksternal
+      final ByteData assetData = await rootBundle.load(_imageAssets[index]);
+      final buffer = assetData.buffer;
+      final List<int> imageData = buffer.asUint8List(assetData.offsetInBytes, assetData.lengthInBytes);
+      File(imagePath).writeAsBytes(imageData);
+
+      // Tampilkan pesan bahwa gambar telah diunduh
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Image for $itemName has been downloaded to $imagePath.'),
+        ),
+      );
+    } else {
+      // Jika tidak dapat mendapatkan direktori penyimpanan eksternal
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to access external storage directory.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('History'),
-        automaticallyImplyLeading: false, // Ini akan menghilangkan panah kembali
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: <Widget>[
@@ -73,29 +122,46 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
             ),
           ),
-          SizedBox(height: 10), // Jarak antara TextField dan ListView
+          SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: _filteredItems.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  height: 160,
+                  height: 220, // Adjust height to accommodate all elements
                   margin: EdgeInsets.symmetric(vertical: 10),
                   color: Colors.white,
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/images/poster3.jpg',
-                        width: double.infinity,
-                        height: 100, // Sesuaikan tinggi gambar sesuai kebutuhan
-                        fit: BoxFit.cover, // Menyesuaikan gambar ke kotak
+                        _imageAssets[index],
+                        width: 150, // Set width to make it square
+                        height: 150, // Set height to make it square
+                        fit: BoxFit.cover,
                         errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                          return Text('Gagal memuat gambar');
+                          return Text('Failed to load image');
                         },
                       ),
-                      SizedBox(height: 10),
-                      Text(_filteredItems[index]),
+                      SizedBox(width: 10),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _filteredItems[index],
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              _downloadImage(_filteredItems[index]);
+                            },
+                            child: Text('Download Image'),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 );

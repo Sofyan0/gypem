@@ -56,14 +56,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back),
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //     },
+      //   ),
+      // ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -140,16 +140,16 @@ class HomePageContent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/notifications');
-                    },
-                  ),
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Icons.notifications,
+                  //     size: 40,
+                  //     color: Colors.white,
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.pushNamed(context, '/notifications');
+                  //   },
+                  // ),
                   Image.asset(
                     'assets/images/logo2.png',
                     width: 70,
