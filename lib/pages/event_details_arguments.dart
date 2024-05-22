@@ -3,9 +3,6 @@ class EventDetailsArguments {
   final String description;
   final String image;
 
-  EventDetailsArguments({
-    required this.title,
-    required this.description,
-    required this.image,
-  });
+  EventDetailsArguments(this.title, this.description, this.image);
 }
+
