@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
+
 import 'event_page.dart';
 
 class AgreementPage extends StatefulWidget {
@@ -28,7 +32,7 @@ class _AgreementPageState extends State<AgreementPage> {
   String? _filePath2;
   String? _filePath3;
 
-  void _submitAgreement(BuildContext context) async {
+  Future<void> _submitAgreement(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isRegistered', true);
     await prefs.setString('status', 'Validasi Berhasil');
@@ -59,6 +63,33 @@ class _AgreementPageState extends State<AgreementPage> {
             break;
         }
       });
+    }
+  }
+
+  Future<void> _uploadFile(String? filePath, String fileType) async {
+    if (filePath == null) return;
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://your-server-address/upload.php'),
+    );
+
+    request.files.add(await http.MultipartFile.fromPath('file', filePath));
+    request.fields['user_id'] = '1';  // Replace with actual user ID
+    request.fields['event_title'] = widget.eventTitle;
+    request.fields['file_type'] = fileType;
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      var responseData = await response.stream.bytesToString();
+      var result = json.decode(responseData);
+      if (result['message'] == 'File uploaded and data inserted') {
+        // Handle success
+      } else {
+        // Handle error
+      }
+    } else {
+      // Handle server error
     }
   }
 
@@ -94,21 +125,30 @@ class _AgreementPageState extends State<AgreementPage> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 16),
-              Text('Bukti Follow Sosmed Gypem:'),
+              Text('Bukti Follow Sosmed Gypem:(size max. 2mb)'),
               ElevatedButton(
-                onPressed: () => _chooseFile(1),
+                onPressed: () async {
+                  await _chooseFile(1);
+                  await _uploadFile(_filePath1, 'follow_sosmed');
+                },
                 child: Text(_filePath1 == null ? 'Pilih File' : _filePath1!.split('/').last),
               ),
               SizedBox(height: 16),
-              Text('Bukti Mention Teman di IG:'),
+              Text('Bukti Mention Teman di IG:(size max. 2mb)'),
               ElevatedButton(
-                onPressed: () => _chooseFile(2),
+                onPressed: () async {
+                  await _chooseFile(2);
+                  await _uploadFile(_filePath2, 'mention_ig');
+                },
                 child: Text(_filePath2 == null ? 'Pilih File' : _filePath2!.split('/').last),
               ),
               SizedBox(height: 16),
-              Text('Bukti Like dan Share:'),
+              Text('Bukti Like dan Share:(size max. 2mb)'),
               ElevatedButton(
-                onPressed: () => _chooseFile(3),
+                onPressed: () async {
+                  await _chooseFile(3);
+                  await _uploadFile(_filePath3, 'like_share');
+                },
                 child: Text(_filePath3 == null ? 'Pilih File' : _filePath3!.split('/').last),
               ),
               SizedBox(height: 16),
@@ -120,7 +160,7 @@ class _AgreementPageState extends State<AgreementPage> {
                 ),
               ),
               CheckboxListTile(
-                title: Text('ISLOSD – BAHASA INDONESIA'),
+                title: Text('SD – BAHASA INDONESIA'),
                 value: isChecked5,
                 onChanged: (bool? value) {
                   setState(() {
@@ -129,7 +169,7 @@ class _AgreementPageState extends State<AgreementPage> {
                 },
               ),
               CheckboxListTile(
-                title: Text('ISLOSD – BAHASA INGGRIS'),
+                title: Text('SD – BAHASA INGGRIS'),
                 value: isChecked6,
                 onChanged: (bool? value) {
                   setState(() {
@@ -138,7 +178,7 @@ class _AgreementPageState extends State<AgreementPage> {
                 },
               ),
               CheckboxListTile(
-                title: Text('ISLOSD – MATEMATIKA'),
+                title: Text('SD – MATEMATIKA'),
                 value: isChecked7,
                 onChanged: (bool? value) {
                   setState(() {
@@ -147,7 +187,7 @@ class _AgreementPageState extends State<AgreementPage> {
                 },
               ),
               SizedBox(height: 16),
-              ElevatedButton(
+                            ElevatedButton(
                 onPressed: () => _submitAgreement(context),
                 child: Text('Daftar'),
               ),
