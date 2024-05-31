@@ -1,35 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_onboarding_screen/onboarding.dart';
 import 'pages/home_page.dart';
-import 'pages/event_details.dart' as EventDetails; // Menggunakan alias untuk menghindari konflik nama
+import 'pages/login_page.dart';
+import 'pages/event_details.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isLoggedIn;
+  
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Definisikan variabel untuk argumen EventDetailsPage
-    final String title = 'Event Title';
-    final String description = 'This is the event description.';
-    final String image = 'assets/images/event_image.jpg';
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: OnboardingPage(),
+      home: isLoggedIn ? HomePage() : OnboardingPage(),
       routes: {
-        '/event_details': (context) => EventDetails.EventDetailsPage(
-              title: title,
-              description: description,
-              image: image,
-            ), // Menggunakan nama yang benar dengan menggunakan alias
+        '/event_details': (context) => EventDetailsPage(
+              title: 'Event Title',
+              description: 'This is the event description.',
+              image: 'assets/images/event_image.jpg',
+            ),
+        '/home': (context) => HomePage(),
+        '/login': (context) => LoginPage(),
       },
       debugShowCheckedModeBanner: false,
     );
