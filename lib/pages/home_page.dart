@@ -6,7 +6,7 @@ import 'package:flutter_onboarding_screen/pages/event_page.dart';
 import 'package:flutter_onboarding_screen/pages/history_page.dart';
 import 'package:flutter_onboarding_screen/pages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_onboarding_screen/Api/api_service.dart'; // Import the ApiService
+// import 'package:flutter_onboarding_screen/Api/api_service.dart'; // Import the ApiService
 // import 'pages/beritagypem_page.dart';
 // import 'pages/beritaolimp_page.dart';
 // import 'pages/beritatesti_page.dart';

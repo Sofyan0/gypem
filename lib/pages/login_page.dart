@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding_screen/email_verification.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'home_page.dart'; // Import halaman home_page.dart
-import 'register_page.dart'; // Import halaman register_page.dart
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
-  runApp(MaterialApp(
-    home: isLoggedIn ? HomePage() : LoginPage(),
-  ));
-}
+import 'home_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,12 +15,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isObscure = true;
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await http.post(
-          Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
+        final response = await http.post(Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
+
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, String>{
             'username': _emailController.text,
@@ -42,13 +34,12 @@ class _LoginPageState extends State<LoginPage> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
           await prefs.setString('username', data['user']['username']);
-          // Save other user details as needed
 
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text("Login Berhasil"),
+                title: const Text("Login Berhasil"),
                 content: Text("Selamat datang, ${data['user']['username']}"),
                 actions: [
                   TextButton(
@@ -58,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                         MaterialPageRoute(builder: (context) => HomePage()),
                       );
                     },
-                    child: Text("OK"),
+                    child: const Text("OK"),
                   ),
                 ],
               );
@@ -68,7 +59,8 @@ class _LoginPageState extends State<LoginPage> {
           _showErrorDialog(context, data['message']);
         }
       } catch (e) {
-        _showSnackbar(context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
+        _showSnackbar(
+            context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
       }
     }
   }
@@ -78,14 +70,14 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Login Gagal"),
+          title: const Text("Login Gagal"),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );
@@ -108,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/login2.png'),
                   fit: BoxFit.cover,
@@ -118,18 +110,18 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Positioned.fill(
             child: Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Username/Email',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.7),
                       ),
@@ -140,16 +132,27 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 20.0),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText:
+                          _isObscure, // Menggunakan variabel _isObscure untuk menentukan apakah teks tersembunyi atau tidak
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.7),
+                        suffixIcon: IconButton(
+                          icon: Icon(_isObscure
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -158,38 +161,59 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10.0),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                        );
-                      },
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'Lupa Password?',
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold),
+                    const SizedBox(height: 40.0),
+                    ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.blue, // Warna teks tombol
+                        minimumSize: const Size(double.infinity, 50), // Ukuran tombol
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10), // Radius sudut melengkung
+                        ),
+                      ),
+                  
+                      child: const Text(
+                        'Masuk',
+                        style: TextStyle(
+                          fontSize: 18, // Ukuran teks
+                          fontWeight: FontWeight.bold, // Tebal teks
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
-                    ElevatedButton(
-                      onPressed: _login,
-                      child: Text('Masuk'),
+                      SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EmailVerification(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Lupa Password?',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 50.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Belum punya akun? ',
                           style: TextStyle(
                             color: Colors.blue,
+                            fontSize: 18,
                           ),
                         ),
                         GestureDetector(
@@ -201,11 +225,12 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Daftar',
                             style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
                           ),
                         ),
@@ -222,13 +247,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+
 class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
   void _sendOtp(BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.23/ApiFlutter/forgot_password.php'),
+        Uri.parse('http://192.168.1.42/ApiFlutter/forgot_password.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{
           'email': _emailController.text,
@@ -241,7 +267,7 @@ class ForgotPasswordPage extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("OTP Terkirim"),
+              title: const Text("OTP Terkirim"),
               content: Text(data['message']),
               actions: [
                 TextButton(
@@ -251,7 +277,7 @@ class ForgotPasswordPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => OtpVerificationPage(email: _emailController.text)),
                     );
                   },
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
               ],
             );
@@ -270,14 +296,14 @@ class ForgotPasswordPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Error"),
+          title: const Text("Error"),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );
@@ -297,23 +323,23 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lupa Password'),
+        title: const Text('Lupa Password'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextFormField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () => _sendOtp(context),
-              child: Text('Kirim OTP'),
+              child: const Text('Kirim OTP'),
             ),
           ],
         ),
@@ -332,7 +358,7 @@ class OtpVerificationPage extends StatelessWidget {
   void _verifyOtp(BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.18.9/ApiFlutter/verify_otp.php'),
+        Uri.parse('http:// 192.168.1.42/ApiFlutter/verify_otp.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{
           'email': email,
@@ -346,7 +372,7 @@ class OtpVerificationPage extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("OTP Valid"),
+              title: const Text("OTP Valid"),
               content: Text(data['message']),
               actions: [
                 TextButton(
@@ -356,7 +382,7 @@ class OtpVerificationPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => ResetPasswordPage(email: email, otp: _otpController.text)),
                     );
                   },
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
               ],
             );
@@ -375,14 +401,14 @@ class OtpVerificationPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("OTP Tidak Valid"),
+          title: const Text("OTP Tidak Valid"),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );
@@ -402,23 +428,23 @@ class OtpVerificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verifikasi OTP'),
+        title: const Text('Verifikasi OTP'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextFormField(
               controller: _otpController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'OTP',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () => _verifyOtp(context),
-              child: Text('Verifikasi OTP'),
+              child: const Text('Verifikasi OTP'),
             ),
           ],
         ),
@@ -437,7 +463,7 @@ class ResetPasswordPage extends StatelessWidget {
   void _updatePassword(BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.18.9/ApiFlutter/new_password.php'),
+        Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{
           'email': email,
@@ -451,7 +477,7 @@ class ResetPasswordPage extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Berhasil"),
+              title: const Text("Berhasil"),
               content: Text(data['message']),
               actions: [
                 TextButton(
@@ -461,7 +487,7 @@ class ResetPasswordPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
               ],
             );
@@ -480,14 +506,14 @@ class ResetPasswordPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Error"),
+          title: const Text("Error"),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );
@@ -507,24 +533,24 @@ class ResetPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset Password'),
+        title: const Text('Reset Password'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             TextFormField(
               controller: _newPasswordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password Baru',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () => _updatePassword(context),
-              child: Text('Reset Password'),
+              child: const Text('Reset Password'),
             ),
           ],
         ),

@@ -120,7 +120,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       alignment: Alignment.bottomCenter,
       child: Container(
         margin: const EdgeInsets.only(bottom: 50),  // Add margin to the bottom
-        width: MediaQuery.of(context).size.width * .9,
+        width: MediaQuery.of(context).size.width * .5,
         height: 55,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),

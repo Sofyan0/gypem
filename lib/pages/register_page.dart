@@ -10,7 +10,6 @@ void main() {
   ));
 }
 
-
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -23,12 +22,14 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _phoneNumberController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
+  bool _isObscure = true;
   String _selectedEducationLevel = 'SD';
   List<String> _educationLevels = ['SD', 'SMP', 'SMA', 'Universitas', 'Umum'];
   String _selectedProvince = '';
+  String _selectedProvinceName = '';
   List<dynamic> _provinces = [];
   String _selectedCity = '';
+  String _selectedCityName = '';
   List<dynamic> _cities = [];
 
   @override
@@ -45,12 +46,12 @@ class _RegisterPageState extends State<RegisterPage> {
         List<dynamic> data = json.decode(response.body);
         setState(() {
           _provinces = data;
-          _selectedProvince =
-              _provinces.isNotEmpty ? _provinces[0]['id'].toString() : '';
+          if (_provinces.isNotEmpty) {
+            _selectedProvince = _provinces[0]['id'].toString();
+            _selectedProvinceName = _provinces[0]['name'].toString();
+            _fetchCities(_selectedProvince);
+          }
         });
-        if (_selectedProvince.isNotEmpty) {
-          _fetchCities(_selectedProvince);
-        }
       } else {
         throw Exception('Failed to load provinces');
       }
@@ -67,7 +68,10 @@ class _RegisterPageState extends State<RegisterPage> {
         List<dynamic> data = json.decode(response.body);
         setState(() {
           _cities = data;
-          _selectedCity = _cities.isNotEmpty ? _cities[0]['id'].toString() : '';
+          if (_cities.isNotEmpty) {
+            _selectedCity = _cities[0]['id'].toString();
+            _selectedCityName = _cities[0]['name'].toString();
+          }
         });
       } else {
         throw Exception('Failed to load cities');
@@ -80,8 +84,21 @@ class _RegisterPageState extends State<RegisterPage> {
   void _updateCitiesDropdown(String? value) {
     setState(() {
       _selectedProvince = value!;
+      _selectedProvinceName = _provinces
+          .firstWhere((province) => province['id'].toString() == value)['name']
+          .toString();
       _selectedCity = ''; // Reset _selectedCity before loading new cities
+      _selectedCityName = '';
       _fetchCities(value);
+    });
+  }
+
+  void _updateCitySelection(String? value) {
+    setState(() {
+      _selectedCity = value!;
+      _selectedCityName = _cities
+          .firstWhere((city) => city['id'].toString() == value)['name']
+          .toString();
     });
   }
 
@@ -108,20 +125,20 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/login2.png'),
+                  image: AssetImage('assets/images/daftar1.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-          SingleChildScrollView(
-            padding: EdgeInsets.all(20.0),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 100.0),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 350.0),
+                  SizedBox(height: 100.0),
                   Text(
                     'Informasi Pribadi',
                     style: TextStyle(
@@ -129,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   DropdownButtonFormField<String>(
                     value: _selectedEducationLevel,
                     items: _educationLevels.map((String level) {
@@ -149,7 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       contentPadding: EdgeInsets.all(15.0),
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   DropdownButtonFormField<String>(
                     value: _selectedProvince.isEmpty ? null : _selectedProvince,
                     items: _provinces.map((province) {
@@ -171,7 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   DropdownButtonFormField<String>(
                     value: _selectedCity.isEmpty ? null : _selectedCity,
                     items: _cities.map((city) {
@@ -180,11 +197,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Text(city['name']),
                       );
                     }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedCity = value!;
-                      });
-                    },
+                    onChanged: _updateCitySelection,
                     decoration: InputDecoration(
                       labelText: 'Kabupaten/Kota',
                       border: OutlineInputBorder(),
@@ -197,7 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   GestureDetector(
                     onTap: () {
                       _selectDate(context);
@@ -219,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   TextFormField(
                     controller: _fullNameController,
                     decoration: InputDecoration(
@@ -234,7 +247,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   TextFormField(
                     controller: _schoolController,
                     decoration: InputDecoration(
@@ -249,7 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   TextFormField(
                     controller: _phoneNumberController,
                     keyboardType: TextInputType.phone,
@@ -269,7 +282,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  SizedBox(height: 30.0),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -282,14 +295,33 @@ class _RegisterPageState extends State<RegisterPage> {
                               birthdate: _birthdateController.text,
                               phoneNumber: _phoneNumberController.text,
                               educationLevel: _selectedEducationLevel,
-                              province: _selectedProvince,
-                              city: _selectedCity,
+                              province: _provinces.firstWhere((prov) =>
+                                  prov['id'].toString() ==
+                                  _selectedProvince)['name'],
+                              city: _cities.firstWhere((city) =>
+                                  city['id'].toString() ==
+                                  _selectedCity)['name'],
                             ),
                           ),
                         );
                       }
                     },
-                    child: Text('Selanjutnya'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue, // Warna teks tombol
+                      minimumSize: Size(double.infinity, 50), // Ukuran tombol
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            10), // Radius sudut melengkung
+                      ),
+                    ),
+                    child: Text(
+                      'Selanjutnya',
+                      style: TextStyle(
+                        fontSize: 18, // Ukuran teks
+                        fontWeight: FontWeight.bold, // Tebal teks
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -343,8 +375,8 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
     if (_formKey.currentState!.validate() &&
         _passwordController.text == _confirmPasswordController.text) {
       try {
-        final response = await http.post(
-          Uri.parse('http://192.168.18.9/ApiFlutter/register.php'),
+        final response = await http.post(Uri.parse('http://192.168.18.9/ApiFlutter/register.php'),
+
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
             'tingkat_pendidikan': widget.educationLevel,
@@ -361,7 +393,8 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
         );
 
         final data = json.decode(response.body);
-        if (response.statusCode == 200 && data['message'] == 'Registrasi berhasil') {
+        if (response.statusCode == 200 &&
+            data['message'] == 'Registrasi berhasil') {
           showDialog(
             context: context,
             builder: (context) {
@@ -438,25 +471,25 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image
+// Background Image
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/login2.png'),
+                  image: AssetImage('assets/images/daftar2.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-          SingleChildScrollView(
-            padding: EdgeInsets.all(20.0),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 5),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 500.0),
+                  SizedBox(height: 350.0),
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
@@ -490,11 +523,32 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
+                    onChanged: (value) {
+                      setState(() {
+                        _showErrors =
+                            false; // Mengatur kembali _showErrors menjadi false saat terjadi perubahan pada TextFormField
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        // Tambahkan pemeriksaan nol sebelum mengakses properti isEmpty
+                        return 'Password tidak boleh kosong';
+                      } else if (value.length < 8) {
+                        return 'Password harus terdiri dari minimal 8 karakter';
+                      } else if (!RegExp(
+                              r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+                          .hasMatch(value)) {
+                        return 'Password harus terdiri dari huruf dan angka';
+                      }
+                      return null; // Return null jika tidak ada error
+                    },
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText: _showErrors && _passwordController.text.isEmpty
+                      errorText: _showErrors &&
+                              (_passwordController.text == null ||
+                                  _passwordController.text.isEmpty)
                           ? 'Password tidak boleh kosong'
                           : null,
                     ),
@@ -507,10 +561,10 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                       labelText: 'Konfirmasi Password',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(15.0),
-                      errorText: _showErrors &&
-                              _confirmPasswordController.text.isEmpty
-                          ? 'Konfirmasi Password tidak boleh kosong'
-                          : null,
+                      errorText:
+                          _showErrors && _confirmPasswordController.text.isEmpty
+                              ? 'Konfirmasi Password tidak boleh kosong'
+                              : null,
                     ),
                   ),
                   SizedBox(height: 10.0),
@@ -521,14 +575,29 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
                   SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: _register,
-                    child: Text('Daftar'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.blue, // Warna teks tombol
+                      minimumSize: Size(double.infinity, 50), // Ukuran tombol
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            10), // Radius sudut melengkung
+                      ),
+                    ),
+                    child: Text(
+                      'Daftar',
+                      style: TextStyle(
+                        fontSize: 18, // Ukuran teks
+                        fontWeight: FontWeight.bold, // Tebal teks
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
         ],
-     ),
-);
-}
+      ),
+    );
+  }
 }
