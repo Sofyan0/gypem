@@ -59,8 +59,8 @@ class _EmailVerificationState extends State<EmailVerification> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Failed to Send Verification Email'),
-              content: Text('Failed to send verification email. Please try again later.'),
+              title: Text('Gagal Mengirim Verifikasi ke Email '),
+              content: Text('Gagal mengirim email verifikasi. Silakan coba lagi nanti.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -80,7 +80,7 @@ class _EmailVerificationState extends State<EmailVerification> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Email Verification'),
+        title: Text('Verifikasi Email'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -89,7 +89,7 @@ class _EmailVerificationState extends State<EmailVerification> {
           child: Column(
             children: <Widget>[
               Text(
-                'Enter your email for verification',
+                'Masukkan email Anda untuk verifikasi',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -103,10 +103,10 @@ class _EmailVerificationState extends State<EmailVerification> {
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Email cannot be empty';
+                    return 'Email tidak boleh kosong';
                   }
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Enter a valid email';
+                    return 'Masukkan email yang valid';
                   }
                   return null;
                 },
@@ -114,7 +114,7 @@ class _EmailVerificationState extends State<EmailVerification> {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _sendVerificationEmail,
-                child: Text('Send Verification Email'),
+                child: Text('Verifikasi Email'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 16),
