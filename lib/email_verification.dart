@@ -44,7 +44,8 @@ class _EmailVerificationState extends State<EmailVerification> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PasswordReset(email: _emailController.text),
+                        builder: (context) =>
+                            PasswordReset(email: _emailController.text),
                       ),
                     );
                   },
@@ -60,7 +61,8 @@ class _EmailVerificationState extends State<EmailVerification> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Gagal Mengirim Verifikasi ke Email '),
-              content: Text('Gagal mengirim email verifikasi. Silakan coba lagi nanti.'),
+              content: Text(
+                  'Gagal mengirim email verifikasi. Silakan coba lagi nanti.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -114,10 +116,20 @@ class _EmailVerificationState extends State<EmailVerification> {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _sendVerificationEmail,
-                child: Text('Verifikasi Email'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  textStyle: TextStyle(fontSize: 16),
+                  foregroundColor: Colors.white, // Warna teks tombol
+                  backgroundColor: Colors.blue, // Warna background tombol
+                  minimumSize: const Size(double.infinity, 50), // Ukuran tombol
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(10), // Radius sudut melengkung
+                  ),
+                ),
+                child: const Text(
+                  'Verifikasi Email',
+                  style: TextStyle(
+                    fontSize: 16, // Ukuran teks
+                  ),
                 ),
               ),
             ],
