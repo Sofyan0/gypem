@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onboarding_screen/Api/api_service.dart';
 import 'package:flutter_onboarding_screen/pages/beritagypem_page.dart';
 import 'package:flutter_onboarding_screen/pages/beritaolimp_page.dart';
 import 'package:flutter_onboarding_screen/pages/beritatesti_page.dart';
@@ -6,13 +7,7 @@ import 'package:flutter_onboarding_screen/pages/event_page.dart';
 import 'package:flutter_onboarding_screen/pages/history_page.dart';
 import 'package:flutter_onboarding_screen/pages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:flutter_onboarding_screen/Api/api_service.dart'; // Import the ApiService
-// import 'pages/beritagypem_page.dart';
-// import 'pages/beritaolimp_page.dart';
-// import 'pages/beritatesti_page.dart';
-// import 'pages/event_page.dart';
-// import 'pages/history_page.dart';
-// import 'pages/profile_page.dart';
+import 'package:flutter_onboarding_screen/Api/api_service.dart'; // Import the ApiService
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,9 +32,7 @@ class _HomePageState extends State<HomePage> {
     _fetchUserName();
   }
 
- 
-
-   void _checkRegistrationStatus() async {
+  void _checkRegistrationStatus() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       isRegistered = prefs.getBool('isRegistered') ?? false;
@@ -49,11 +42,11 @@ class _HomePageState extends State<HomePage> {
   void _fetchUserName() async {
     try {
       ApiService apiService = ApiService();
-      final userData = await apiService.getUserData();
+      final userData = await apiService.getUserData(userName);
       setState(() {
         userName = userData['name'];
       });
-      // Simpan userName ke SharedPreferences
+      // Save userName to SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('username', userName);
     } catch (e) {
@@ -138,7 +131,7 @@ class HomePageContent extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final prefs = snapshot.data as SharedPreferences;
-          final userName = prefs.getString('userName') ?? 'Guest';
+          final userName = prefs.getString('username') ?? 'Guest';
           return ListView(
             children: [
               Container(
@@ -192,19 +185,20 @@ class HomePageContent extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/berita_terkini');
-                      },
-                      child: Text(
-                        "Lihat Semua",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF674AEF),
-                        ),
-                      ),
-                    ),
+                    // Uncomment the following lines if you want to add "Lihat Semua" link
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.pushNamed(context, '/berita_terkini');
+                    //   },
+                    //   child: Text(
+                    //     "Lihat Semua",
+                    //     style: TextStyle(
+                    //       fontSize: 18,
+                    //       fontWeight: FontWeight.w500,
+                    //       color: Color(0xFF674AEF),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -336,7 +330,7 @@ class HomePageContent extends StatelessWidget {
                                   Text(
                                     eventOlimpiadeTexts[index],
                                     style: TextStyle(
-                                                                           fontSize: 14,
+                                      fontSize: 14,
                                       color: Colors.grey,
                                     ),
                                   ),
@@ -378,26 +372,3 @@ class HomePageContent extends StatelessWidget {
     );
   }
 }
-
-class BeritaTerkiniPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Berita Terkini'),
-      ),
-      body: Center(
-        child: Text('Halaman Berita Terkini'),
-      ),
-    );
-  }
-}
-
-class ApiService {
-  Future<Map<String, dynamic>> getUserData() async {
-    // Simulasi pemanggilan API untuk mendapatkan data pengguna
-    await Future.delayed(Duration(seconds: 2)); // Simulasi waktu tunggu jaringan
-    return {'name': 'John Doe'}; // Ganti dengan respons dari API
-  }
-}
-

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/email_verification.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_onboarding_screen/onboarding.dart';
 import 'pages/home_page.dart';
