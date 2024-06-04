@@ -35,8 +35,8 @@ class _EmailVerificationState extends State<EmailVerification> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Verification Email Sent'),
-              content: Text('An email has been sent for verification.'),
+              title: Text('verifikasi Email '),
+              content: Text('Email telah dikirim untuk verifikasi.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
