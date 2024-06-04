@@ -136,13 +136,23 @@ class _PasswordResetState extends State<PasswordReset> {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: _resetPassword,
-                child: Text('Reset Password'),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  textStyle: TextStyle(fontSize: 16),
-                ),
-              ),
+  onPressed: _resetPassword,
+  style: ElevatedButton.styleFrom(
+    foregroundColor: Colors.white, // Warna teks tombol
+    backgroundColor: Colors.blue, // Warna background tombol
+    minimumSize: const Size(double.infinity, 50), // Ukuran tombol
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10), // Radius sudut melengkung
+    ),
+  ),
+  child: const Text(
+    'Perbarui Password',
+    style: TextStyle(
+      fontSize: 16, // Ukuran teks
+    ),
+  ),
+),
+
             ],
           ),
         ),
