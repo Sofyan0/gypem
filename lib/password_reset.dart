@@ -42,8 +42,8 @@ class _PasswordResetState extends State<PasswordReset> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Password Reset Successful'),
-              content: Text('Your password has been successfully reset.'),
+              title: Text('password berhasil di perbarui'),
+              content: Text('Kata sandi Anda telah berhasil diperbarui'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -64,8 +64,8 @@ class _PasswordResetState extends State<PasswordReset> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Failed to Reset Password'),
-              content: Text('Failed to reset password. Please try again later.'),
+              title: Text('password gagal di perbarui'),
+              content: Text('Gagal memperbarui ulang sandi. Silakan coba lagi nanti.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -85,7 +85,7 @@ class _PasswordResetState extends State<PasswordReset> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset Password'),
+        title: Text('Perbatui Password'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -94,7 +94,7 @@ class _PasswordResetState extends State<PasswordReset> {
           child: Column(
             children: <Widget>[
               Text(
-                'Enter your new password',
+                'Masukkan Password baru Anda',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -102,16 +102,16 @@ class _PasswordResetState extends State<PasswordReset> {
               TextFormField(
                 controller: _newPasswordController,
                 decoration: InputDecoration(
-                  labelText: 'New Password',
+                  labelText: 'Password Baru',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'New password cannot be empty';
+                    return 'Kata sandi baru tidak boleh kosong';
                   }
-                  if (value.length < 6) {
-                    return 'New password must be at least 6 characters long';
+                  if (value.length < 8) {
+                    return 'Kata sandi baru harus terdiri dari minimal 8 karakter';
                   }
                   return null;
                 },
@@ -120,16 +120,16 @@ class _PasswordResetState extends State<PasswordReset> {
               TextFormField(
                 controller: _confirmPasswordController,
                 decoration: InputDecoration(
-                  labelText: 'Confirm New Password',
+                  labelText: 'Konfirmasi password baru',
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Confirm new password cannot be empty';
+                    return 'Konfirmasi kata sandi baru tidak boleh kosong';
                   }
                   if (value != _newPasswordController.text) {
-                    return 'Passwords do not match';
+                    return 'Sandi Tidak Cocok';
                   }
                   return null;
                 },
