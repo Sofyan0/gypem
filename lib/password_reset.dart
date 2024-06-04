@@ -15,7 +15,8 @@ class PasswordReset extends StatefulWidget {
 class _PasswordResetState extends State<PasswordReset> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -65,7 +66,8 @@ class _PasswordResetState extends State<PasswordReset> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('password gagal di perbarui'),
-              content: Text('Gagal memperbarui ulang sandi. Silakan coba lagi nanti.'),
+              content: Text(
+                  'Gagal memperbarui ulang sandi. Silakan coba lagi nanti.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -113,6 +115,11 @@ class _PasswordResetState extends State<PasswordReset> {
                   if (value.length < 8) {
                     return 'Kata sandi baru harus terdiri dari minimal 8 karakter';
                   }
+                  bool hasLetter = value.contains(RegExp(r'[a-zA-Z]'));
+                  bool hasDigit = value.contains(RegExp(r'\d'));
+                  if (!hasLetter || !hasDigit) {
+                    return 'Kata sandi baru harus mengandung huruf dan angka';
+                  }
                   return null;
                 },
               ),
@@ -136,23 +143,23 @@ class _PasswordResetState extends State<PasswordReset> {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-  onPressed: _resetPassword,
-  style: ElevatedButton.styleFrom(
-    foregroundColor: Colors.white, // Warna teks tombol
-    backgroundColor: Colors.blue, // Warna background tombol
-    minimumSize: const Size(double.infinity, 50), // Ukuran tombol
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10), // Radius sudut melengkung
-    ),
-  ),
-  child: const Text(
-    'Perbarui Password',
-    style: TextStyle(
-      fontSize: 16, // Ukuran teks
-    ),
-  ),
-),
-
+                onPressed: _resetPassword,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, // Warna teks tombol
+                  backgroundColor: Colors.blue, // Warna background tombol
+                  minimumSize: const Size(double.infinity, 50), // Ukuran tombol
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(10), // Radius sudut melengkung
+                  ),
+                ),
+                child: const Text(
+                  'Perbarui Password',
+                  style: TextStyle(
+                    fontSize: 16, // Ukuran teks
+                  ),
+                ),
+              ),
             ],
           ),
         ),
