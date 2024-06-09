@@ -5,4 +5,3 @@ class EventDetailsArguments {
 
   EventDetailsArguments(this.title, this.description, this.image);
 }
-

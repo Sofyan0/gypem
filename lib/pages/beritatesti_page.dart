@@ -75,7 +75,8 @@ class BeritaTestimoniPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTestimonial(String name, String major, String leftImage, String rightImage) {
+  Widget _buildTestimonial(
+      String name, String major, String leftImage, String rightImage) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,7 +107,8 @@ class BeritaTestimoniPage extends StatelessWidget {
       width: 160,
       height: 200,
       fit: BoxFit.cover,
-      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+      errorBuilder:
+          (BuildContext context, Object exception, StackTrace? stackTrace) {
         return Text('Gagal memuat gambar');
       },
     );

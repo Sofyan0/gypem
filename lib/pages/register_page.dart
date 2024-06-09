@@ -375,8 +375,8 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
     if (_formKey.currentState!.validate() &&
         _passwordController.text == _confirmPasswordController.text) {
       try {
-        final response = await http.post(Uri.parse('http://192.168.18.9/ApiFlutter/register.php'),
-
+        final response = await http.post(
+          Uri.parse('http://192.168.18.9/ApiFlutter/register.php'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
             'tingkat_pendidikan': widget.educationLevel,

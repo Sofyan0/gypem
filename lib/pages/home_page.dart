@@ -7,7 +7,6 @@ import 'package:flutter_onboarding_screen/pages/event_page.dart';
 import 'package:flutter_onboarding_screen/pages/history_page.dart';
 import 'package:flutter_onboarding_screen/pages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_onboarding_screen/Api/api_service.dart'; // Import the ApiService
 
 class HomePage extends StatefulWidget {
   @override
@@ -46,7 +45,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         userName = userData['name'];
       });
-      // Save userName to SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('username', userName);
     } catch (e) {
@@ -135,7 +133,8 @@ class HomePageContent extends StatelessWidget {
           return ListView(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
+                padding:
+                    EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 10),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 40, 66, 131),
                   borderRadius: BorderRadius.only(
@@ -185,20 +184,6 @@ class HomePageContent extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    // Uncomment the following lines if you want to add "Lihat Semua" link
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.pushNamed(context, '/berita_terkini');
-                    //   },
-                    //   child: Text(
-                    //     "Lihat Semua",
-                    //     style: TextStyle(
-                    //       fontSize: 18,
-                    //       fontWeight: FontWeight.w500,
-                    //       color: Color(0xFF674AEF),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -246,7 +231,8 @@ class HomePageContent extends StatelessWidget {
                               width: 160,
                               height: 120,
                               fit: BoxFit.cover,
-                              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
                                 return Text('Gagal memuat gambar');
                               },
                             ),
@@ -273,9 +259,7 @@ class HomePageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: 10),
               Container(
                 height: 500,
                 child: ListView.builder(
@@ -285,7 +269,8 @@ class HomePageContent extends StatelessWidget {
                     return Container(
                       width: double.infinity,
                       height: 160,
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -314,7 +299,8 @@ class HomePageContent extends StatelessWidget {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -340,7 +326,8 @@ class HomePageContent extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => EventPage(),
+                                          builder: (context) => EventPage(
+                                              selectedEventIndex: index),
                                         ),
                                       );
                                     },

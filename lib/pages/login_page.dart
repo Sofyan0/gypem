@@ -20,8 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await http.post(Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
-
+        final response = await http.post(
+          Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, String>{
             'username': _emailController.text,
@@ -167,13 +167,13 @@ class _LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.blue, // Warna teks tombol
-                        minimumSize: const Size(double.infinity, 50), // Ukuran tombol
+                        minimumSize:
+                            const Size(double.infinity, 50), // Ukuran tombol
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               10), // Radius sudut melengkung
                         ),
                       ),
-                  
                       child: const Text(
                         'Masuk',
                         style: TextStyle(
@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                      SizedBox(height: 20.0),
+                    SizedBox(height: 20.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -200,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 16,
-                            
                             ),
                           ),
                         ),
@@ -248,7 +247,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-
 class ForgotPasswordPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
@@ -263,7 +261,8 @@ class ForgotPasswordPage extends StatelessWidget {
       );
 
       final data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data['message'] == 'OTP telah dikirim ke email Anda') {
+      if (response.statusCode == 200 &&
+          data['message'] == 'OTP telah dikirim ke email Anda') {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -275,7 +274,9 @@ class ForgotPasswordPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => OtpVerificationPage(email: _emailController.text)),
+                      MaterialPageRoute(
+                          builder: (context) => OtpVerificationPage(
+                              email: _emailController.text)),
                     );
                   },
                   child: const Text("OK"),
@@ -288,7 +289,8 @@ class ForgotPasswordPage extends StatelessWidget {
         _showErrorDialog(context, data['message']);
       }
     } catch (e) {
-      _showSnackbar(context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
+      _showSnackbar(
+          context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
     }
   }
 
@@ -380,7 +382,9 @@ class OtpVerificationPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResetPasswordPage(email: email, otp: _otpController.text)),
+                      MaterialPageRoute(
+                          builder: (context) => ResetPasswordPage(
+                              email: email, otp: _otpController.text)),
                     );
                   },
                   child: const Text("OK"),
@@ -393,7 +397,8 @@ class OtpVerificationPage extends StatelessWidget {
         _showErrorDialog(context, data['message']);
       }
     } catch (e) {
-      _showSnackbar(context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
+      _showSnackbar(
+          context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
     }
   }
 
@@ -473,7 +478,8 @@ class ResetPasswordPage extends StatelessWidget {
       );
 
       final data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data['message'] == 'Password berhasil diperbarui') {
+      if (response.statusCode == 200 &&
+          data['message'] == 'Password berhasil diperbarui') {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -498,7 +504,8 @@ class ResetPasswordPage extends StatelessWidget {
         _showErrorDialog(context, data['message']);
       }
     } catch (e) {
-      _showSnackbar(context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
+      _showSnackbar(
+          context, 'Terjadi kesalahan, periksa koneksi internet Anda.');
     }
   }
 

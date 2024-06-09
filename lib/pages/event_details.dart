@@ -74,19 +74,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     child: ElevatedButton(
                       onPressed: () async {
                         bool? result = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AgreementPage(
-                            eventTitle: 'Judul Event',
-                            eventDescription: 'Deskripsi Event',
-                            eventImage: 'assets/images/event_image.jpg',
+                          MaterialPageRoute(
+                            builder: (context) => AgreementPage(
+                              eventTitle: 'Judul Event',
+                              eventDescription: 'Deskripsi Event',
+                              eventImage: 'assets/images/event_image.jpg',
+                            ),
                           ),
-                        ),
-                      );
+                        );
                         if (result == true) {
                           _register();
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => EventPage(),
+                              builder: (context) => AgreementPage(
+                                  eventTitle: 'Judul Event',
+                                  eventDescription: 'Deskripsi Event',
+                                  eventImage: 'assets/images/event_image.jpg'),
                             ),
                           );
                         }
@@ -94,7 +97,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       child: Text('Daftar'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         textStyle: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -137,9 +141,21 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   Widget _buildMapelList() {
     List<Map<String, String>> mapelList = [
-      {'mapel': 'ISLOSD – BAHASA INDONESIA', 'waktu': '27 April 2024 13:00 WIB', 'info': _getInfo()},
-      {'mapel': 'ISLOSD – BAHASA INGGRIS', 'waktu': '28 April 2024 13:00 WIB', 'info': _getInfo()},
-      {'mapel': 'ISLOSD – MATEMATIKA', 'waktu': '29 April 2024 13:00 WIB', 'info': _getInfo()},
+      {
+        'mapel': 'ISLOSD – BAHASA INDONESIA',
+        'waktu': '27 April 2024 13:00 WIB',
+        'info': _getInfo()
+      },
+      {
+        'mapel': 'ISLOSD – BAHASA INGGRIS',
+        'waktu': '28 April 2024 13:00 WIB',
+        'info': _getInfo()
+      },
+      {
+        'mapel': 'ISLOSD – MATEMATIKA',
+        'waktu': '29 April 2024 13:00 WIB',
+        'info': _getInfo()
+      },
     ];
 
     return Column(

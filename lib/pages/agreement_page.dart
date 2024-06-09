@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io';
 
 import 'event_page.dart';
 
@@ -26,7 +25,6 @@ class _AgreementPageState extends State<AgreementPage> {
   bool isChecked5 = false;
   bool isChecked6 = false;
   bool isChecked7 = false;
-  bool isChecked8 = false;
 
   String? _filePath1;
   String? _filePath2;
@@ -42,14 +40,14 @@ class _AgreementPageState extends State<AgreementPage> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => EventPage(),
+        builder: (context) => EventPage(selectedEventIndex: 0),
       ),
     );
   }
 
   Future<void> _chooseFile(int fileIndex) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
+    if (result != null && result.files.single.path != null) {
       setState(() {
         switch (fileIndex) {
           case 1:
@@ -67,29 +65,33 @@ class _AgreementPageState extends State<AgreementPage> {
   }
 
   Future<void> _uploadFile(String? filePath, String fileType) async {
-    if (filePath == null) return;
+    try {
+      if (filePath == null) return;
 
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('http://your-server-address/upload.php'),
-    );
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://your-server-address/upload.php'),
+      );
 
-    request.files.add(await http.MultipartFile.fromPath('file', filePath));
-    request.fields['user_id'] = '1';  // Replace with actual user ID
-    request.fields['event_title'] = widget.eventTitle;
-    request.fields['file_type'] = fileType;
+      request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      request.fields['user_id'] = '1'; // Replace with actual user ID
+      request.fields['event_title'] = widget.eventTitle;
+      request.fields['file_type'] = fileType;
 
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      var responseData = await response.stream.bytesToString();
-      var result = json.decode(responseData);
-      if (result['message'] == 'File uploaded and data inserted') {
-        // Handle success
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        var responseData = await response.stream.bytesToString();
+        var result = json.decode(responseData);
+        if (result['message'] == 'File uploaded and data inserted') {
+          // Handle success
+        } else {
+          print('Upload error: ${result['message']}');
+        }
       } else {
-        // Handle error
+        print('Server error: ${response.statusCode}');
       }
-    } else {
-      // Handle server error
+    } catch (e) {
+      print('Error during file upload: $e');
     }
   }
 
@@ -125,32 +127,18 @@ class _AgreementPageState extends State<AgreementPage> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 16),
-              Text('Bukti Follow Sosmed Gypem:(size max. 2mb)'),
-              ElevatedButton(
-                onPressed: () async {
-                  await _chooseFile(1);
-                  await _uploadFile(_filePath1, 'follow_sosmed');
-                },
-                child: Text(_filePath1 == null ? 'Pilih File' : _filePath1!.split('/').last),
-              ),
-              SizedBox(height: 16),
-              Text('Bukti Mention Teman di IG:(size max. 2mb)'),
-              ElevatedButton(
-                onPressed: () async {
-                  await _chooseFile(2);
-                  await _uploadFile(_filePath2, 'mention_ig');
-                },
-                child: Text(_filePath2 == null ? 'Pilih File' : _filePath2!.split('/').last),
-              ),
-              SizedBox(height: 16),
-              Text('Bukti Like dan Share:(size max. 2mb)'),
-              ElevatedButton(
-                onPressed: () async {
-                  await _chooseFile(3);
-                  await _uploadFile(_filePath3, 'like_share');
-                },
-                child: Text(_filePath3 == null ? 'Pilih File' : _filePath3!.split('/').last),
-              ),
+              _buildFileUploadSection(
+                  'Bukti Follow Sosmed Gypem:(size max. 2mb)',
+                  1,
+                  _filePath1,
+                  'follow_sosmed'),
+              _buildFileUploadSection(
+                  'Bukti Mention Teman di IG:(size max. 2mb)',
+                  2,
+                  _filePath2,
+                  'mention_ig'),
+              _buildFileUploadSection('Bukti Like dan Share:(size max. 2mb)', 3,
+                  _filePath3, 'like_share'),
               SizedBox(height: 16),
               Text(
                 'Mapel',
@@ -159,35 +147,25 @@ class _AgreementPageState extends State<AgreementPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              CheckboxListTile(
-                title: Text('SD – BAHASA INDONESIA'),
-                value: isChecked5,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked5 = value ?? false;
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: Text('SD – BAHASA INGGRIS'),
-                value: isChecked6,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked6 = value ?? false;
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: Text('SD – MATEMATIKA'),
-                value: isChecked7,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked7 = value ?? false;
-                  });
-                },
-              ),
+              _buildCheckboxTile('SD – BAHASA INDONESIA', isChecked5,
+                  (bool? value) {
+                setState(() {
+                  isChecked5 = value ?? false;
+                });
+              }),
+              _buildCheckboxTile('SD – BAHASA INGGRIS', isChecked6,
+                  (bool? value) {
+                setState(() {
+                  isChecked6 = value ?? false;
+                });
+              }),
+              _buildCheckboxTile('SD – MATEMATIKA', isChecked7, (bool? value) {
+                setState(() {
+                  isChecked7 = value ?? false;
+                });
+              }),
               SizedBox(height: 16),
-                            ElevatedButton(
+              ElevatedButton(
                 onPressed: () => _submitAgreement(context),
                 child: Text('Daftar'),
               ),
@@ -195,6 +173,34 @@ class _AgreementPageState extends State<AgreementPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildFileUploadSection(
+      String title, int fileIndex, String? filePath, String fileType) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title),
+        ElevatedButton(
+          onPressed: () async {
+            await _chooseFile(fileIndex);
+            await _uploadFile(filePath, fileType);
+          },
+          child:
+              Text(filePath == null ? 'Pilih File' : filePath.split('/').last),
+        ),
+        SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildCheckboxTile(
+      String title, bool value, Function(bool?) onChanged) {
+    return CheckboxListTile(
+      title: Text(title),
+      value: value,
+      onChanged: onChanged,
     );
   }
 }

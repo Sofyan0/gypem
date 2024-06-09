@@ -34,7 +34,8 @@ class BeritaGypemIndonesiaPage extends StatelessWidget {
                 'Misi:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text('1. Menjadikan pelajar Indonesia menjadi pelajar yang unggul'),
+              Text(
+                  '1. Menjadikan pelajar Indonesia menjadi pelajar yang unggul'),
               Text('2. Meningkatkan Kualitas Pendidikan'),
               Text('3. Meningkatkan kemampuan pemecahan masalah'),
             ],
