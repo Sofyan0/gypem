@@ -118,7 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: SingleChildScrollView(
+        child: Stack(
         children: [
           // Background Image
           Positioned.fill(
@@ -132,13 +133,13 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 100.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 200.0),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 100.0),
+                  SizedBox(height: 20.0),
                   Text(
                     'Informasi Pribadi',
                     style: TextStyle(
@@ -166,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       contentPadding: EdgeInsets.all(15.0),
                     ),
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   DropdownButtonFormField<String>(
                     value: _selectedProvince.isEmpty ? null : _selectedProvince,
                     items: _provinces.map((province) {
@@ -188,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   DropdownButtonFormField<String>(
                     value: _selectedCity.isEmpty ? null : _selectedCity,
                     items: _cities.map((city) {
@@ -210,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   GestureDetector(
                     onTap: () {
                       _selectDate(context);
@@ -232,7 +233,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   TextFormField(
                     controller: _fullNameController,
                     decoration: InputDecoration(
@@ -247,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   TextFormField(
                     controller: _schoolController,
                     decoration: InputDecoration(
@@ -262,7 +263,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   TextFormField(
                     controller: _phoneNumberController,
                     keyboardType: TextInputType.phone,
@@ -282,7 +283,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -329,7 +330,10 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ],
       ),
+      ),
     );
+
+    
   }
 }
 
@@ -375,7 +379,7 @@ class _RegisterCredentialsPageState extends State<RegisterCredentialsPage> {
     if (_formKey.currentState!.validate() &&
         _passwordController.text == _confirmPasswordController.text) {
       try {
-        final response = await http.post(Uri.parse('http://192.168.18.9/ApiFlutter/register.php'),
+        final response = await http.post(Uri.parse('http://192.168.18.10/ApiFlutter/register.php'),
 
           headers: {'Content-Type': 'application/json'},
           body: json.encode({

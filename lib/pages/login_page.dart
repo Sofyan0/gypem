@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await http.post(Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
+        final response = await http.post(Uri.parse('http://192.168.18.10/ApiFlutter/login.php'),
 
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, String>{
@@ -120,14 +120,14 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Username/Email',
+                        labelText: 'Username',
                         border: const OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.7),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email tidak boleh kosong';
+                          return 'Username tidak boleh kosong';
                         }
                         return null;
                       },

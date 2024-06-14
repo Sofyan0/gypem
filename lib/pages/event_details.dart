@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'agreement_page.dart'; // Import AgreementPage
-import 'event_page.dart'; // Import EventPage
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'agreement_page.dart';
+import 'pdf_view.dart';
+import 'exam_question_page.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final String title;
@@ -22,6 +26,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   bool isRegistered = false;
   bool isValidated = false;
   bool isExamTime = false;
+  String mapelStatus = 'Validasi Berhasil';
+
+  List<Map<String, String>> mapelList = [
+    {
+      'mapel': 'ISLO SMA – BAHASA INDONESIA',
+      'waktu': '27 April 2024 13:00 WIB',
+      'info': 'Belum daftar'
+    },
+    {
+      'mapel': 'ISLO SMA – BAHASA INGGRIS',
+      'waktu': '28 April 2024 13:00 WIB',
+      'info': 'Belum daftar'
+    },
+    {
+      'mapel': 'ISLO SMA – MATEMATIKA',
+      'waktu': '29 April 2024 13:00 WIB',
+      'info': 'Belum daftar'
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -74,27 +97,44 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     child: ElevatedButton(
                       onPressed: () async {
                         bool? result = await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AgreementPage(
-                            eventTitle: 'Judul Event',
-                            eventDescription: 'Deskripsi Event',
-                            eventImage: 'assets/images/event_image.jpg',
+                          MaterialPageRoute(
+                            builder: (context) => AgreementPage(
+                              eventTitle: 'Judul Event',
+                              eventDescription: 'Deskripsi Event',
+                              eventImage: 'assets/images/event_image.jpg',
+                            ),
                           ),
-                        ),
-                      );
+                        );
                         if (result == true) {
                           _register();
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => EventPage(),
-                            ),
-                          );
                         }
                       },
                       child: Text('Daftar'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        textStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        String path = await _copyAsset('assets/pdf/juknis.pdf');
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => PdfViewPage(path: path),
+                          ),
+                        );
+                      },
+                      child: Text('Petunjuk Teknis'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                         textStyle: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -114,6 +154,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   void _register() async {
     setState(() {
       isRegistered = true;
+      mapelStatus = 'Menunggu Validasi';
     });
 
     // Save registration status in shared preferences
@@ -121,27 +162,30 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     await prefs.setBool('isRegistered', true);
 
     // Simulate admin validation process
-    Future.delayed(Duration(seconds: 5), () {
-      setState(() {
-        isValidated = true;
-      });
-    });
-
-    // Simulate exam time
     Future.delayed(Duration(seconds: 10), () {
       setState(() {
-        isExamTime = true;
+        isValidated = true;
+        mapelStatus = 'Validasi Berhasil';
+
+        // Manual update untuk setiap mapel yang belum terdaftar
+        mapelList.forEach((mapelItem) {
+          if (mapelItem['info'] == 'Belum daftar') {
+            mapelItem['info'] = 'Validasi Berhasil';
+          }
+        });
+      });
+
+      // Simulate exam time
+      Future.delayed(Duration(seconds: 20), () {
+        setState(() {
+          isExamTime = true;
+          mapelStatus = 'Kerjakan';
+        });
       });
     });
   }
 
   Widget _buildMapelList() {
-    List<Map<String, String>> mapelList = [
-      {'mapel': 'ISLOSD – BAHASA INDONESIA', 'waktu': '27 April 2024 13:00 WIB', 'info': _getInfo()},
-      {'mapel': 'ISLOSD – BAHASA INGGRIS', 'waktu': '28 April 2024 13:00 WIB', 'info': _getInfo()},
-      {'mapel': 'ISLOSD – MATEMATIKA', 'waktu': '29 April 2024 13:00 WIB', 'info': _getInfo()},
-    ];
-
     return Column(
       children: mapelList.map((mapelItem) {
         return Card(
@@ -159,23 +203,19 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
+            onTap: () {
+              if (mapelItem['info'] == 'Kerjakan') {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ExamQuestionPage(mapel: mapelItem['mapel']!),
+                  ),
+                );
+              }
+            },
           ),
         );
       }).toList(),
     );
-  }
-
-  String _getInfo() {
-    if (!isRegistered) {
-      return 'Belum daftar';
-    } else if (isRegistered && !isValidated) {
-      return 'Menunggu Validasi';
-    } else if (isRegistered && isValidated && !isExamTime) {
-      return 'Validasi Berhasil';
-    } else if (isRegistered && isValidated && isExamTime) {
-      return 'Kerjakan';
-    }
-    return 'Unknown';
   }
 
   Color _getInfoColor(String info) {
@@ -190,6 +230,19 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         return Colors.blue;
       default:
         return Colors.grey;
+    }
+  }
+
+  Future<String> _copyAsset(String assetPath) async {
+    try {
+      final byteData = await rootBundle.load(assetPath);
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/${assetPath.split('/').last}');
+      await file.writeAsBytes(byteData.buffer.asUint8List());
+      return file.path;
+    } catch (e) {
+      print('Error copying asset: $e');
+      return '';
     }
   }
 }

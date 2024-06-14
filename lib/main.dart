@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/email_verification.dart';
+import 'package:flutter_onboarding_screen/pages/exam_info_page.dart';
+import 'package:flutter_onboarding_screen/pages/history_page.dart';
+import 'package:flutter_onboarding_screen/pages/profile_page.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_onboarding_screen/onboarding.dart';
 import 'pages/home_page.dart';
@@ -27,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: isLoggedIn ? OnboardingPage() : OnboardingPage(),
+      home: isLoggedIn ? HomePage() : OnboardingPage(),
       routes: {
         '/event_details': (context) => EventDetailsPage(
               title: 'Event Title',

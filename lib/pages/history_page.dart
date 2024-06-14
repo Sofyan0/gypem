@@ -11,29 +11,29 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   TextEditingController _searchController = TextEditingController();
   List<String> _historyItems = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-    'Item 6',
-    'Item 7',
-    'Item 8',
-    'Item 9',
-    'Item 10',
+    'sertifikat english',
+    // 'Item 2',
+    // 'Item 3',
+    // 'Item 4',
+    // 'Item 5',
+    // 'Item 6',
+    // 'Item 7',
+    // 'Item 8',
+    // 'Item 9',
+    // 'Item 10',
   ];
   List<String> _filteredItems = [];
   List<String> _imageAssets = [
-    'assets/images/poster1.jpg',
-    'assets/images/poster2.jpg',
-    'assets/images/poster3.jpg',
-    'assets/images/poster4.jpg',
-    'assets/images/poster5.jpg',
-    'assets/images/poster6.jpg',
-    'assets/images/poster7.jpg',
-    'assets/images/poster8.jpg',
-    'assets/images/poster9.jpg',
-    'assets/images/poster10.jpg',
+    'assets/images/sertif3.jpg',
+    // 'assets/images/poster2.jpg',
+    // 'assets/images/poster3.jpg',
+    // 'assets/images/poster4.jpg',
+    // 'assets/images/sertif.jpg',
+    // 'assets/images/sertif2.jpg',
+    // 'assets/images/sertif3.jpg',
+    // 'assets/images/poster8.jpg',
+    // 'assets/images/poster9.jpg',
+    // 'assets/images/poster10.jpg',
   ];
 
   @override
@@ -102,7 +102,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: Text('Sertifikat'),
         automaticallyImplyLeading: false,
       ),
       body: Column(

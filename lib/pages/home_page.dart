@@ -76,17 +76,17 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.purple),
+            icon: Icon(Icons.home, color: Colors.blue),
             label: 'Home',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history, color: Colors.purple),
-            label: 'History',
+            icon: Icon(Icons.card_membership, color: Colors.blueGrey),
+            label: 'sertifikat',
             backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: Colors.purple),
+            icon: Icon(Icons.person, color: Colors.blueAccent),
             label: 'Profile',
             backgroundColor: Colors.white,
           ),

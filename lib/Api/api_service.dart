@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String apiUrl = 'http://192.168.18.9/ApiFlutter/data.php';
+  final String apiUrl = 'http://127.0.0.1:8000/api/data';
 
   Future<Map<String, dynamic>> getUserData(String userId) async {
     final response = await http.get(Uri.parse('$apiUrl?user_id=$userId'));

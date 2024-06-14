@@ -56,7 +56,7 @@ class ExamInfoPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ExamQuestionPage()),
+                    MaterialPageRoute(builder: (context) => ExamQuestionPage(mapel: '',)),
                   );
                 },
                 child: Text('Mulai'),
