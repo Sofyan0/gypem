@@ -67,9 +67,10 @@ class _HistoryPageState extends State<HistoryPage> {
   Future<void> _downloadImage(String itemName) async {
     // Ambil indeks item yang sesuai dengan nama item
     int index = _historyItems.indexOf(itemName);
-    
+
     // Dapatkan direktori penyimpanan eksternal pada perangkat
-    Directory? appExternalStorageDirectory = await getExternalStorageDirectory();
+    Directory? appExternalStorageDirectory =
+        await getExternalStorageDirectory();
     String? externalStoragePath = appExternalStorageDirectory?.path;
 
     if (externalStoragePath != null) {
@@ -79,13 +80,15 @@ class _HistoryPageState extends State<HistoryPage> {
       // Salin file gambar dari assets ke penyimpanan eksternal
       final ByteData assetData = await rootBundle.load(_imageAssets[index]);
       final buffer = assetData.buffer;
-      final List<int> imageData = buffer.asUint8List(assetData.offsetInBytes, assetData.lengthInBytes);
+      final List<int> imageData =
+          buffer.asUint8List(assetData.offsetInBytes, assetData.lengthInBytes);
       File(imagePath).writeAsBytes(imageData);
 
       // Tampilkan pesan bahwa gambar telah diunduh
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Image for $itemName has been downloaded to $imagePath.'),
+          content:
+              Text('Image for $itemName has been downloaded to $imagePath.'),
         ),
       );
     } else {
@@ -140,7 +143,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         width: 150, // Set width to make it square
                         height: 150, // Set height to make it square
                         fit: BoxFit.cover,
-                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
                           return Text('Failed to load image');
                         },
                       ),
@@ -151,7 +155,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         children: [
                           Text(
                             _filteredItems[index],
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 10),
                           ElevatedButton(

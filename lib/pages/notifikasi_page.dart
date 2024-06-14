@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/pages/home_page.dart';
 import 'package:flutter_onboarding_screen/pages/notifikasi_page.dart';
+
 void main() {
   runApp(const MyApp());
 }

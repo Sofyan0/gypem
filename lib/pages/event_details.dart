@@ -107,12 +107,24 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         );
                         if (result == true) {
                           _register();
+<<<<<<< HEAD
+=======
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => AgreementPage(
+                                  eventTitle: 'Judul Event',
+                                  eventDescription: 'Deskripsi Event',
+                                  eventImage: 'assets/images/event_image.jpg'),
+                            ),
+                          );
+>>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
                         }
                       },
                       child: Text('Daftar'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         textStyle: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -186,6 +198,27 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   }
 
   Widget _buildMapelList() {
+<<<<<<< HEAD
+=======
+    List<Map<String, String>> mapelList = [
+      {
+        'mapel': 'ISLOSD – BAHASA INDONESIA',
+        'waktu': '27 April 2024 13:00 WIB',
+        'info': _getInfo()
+      },
+      {
+        'mapel': 'ISLOSD – BAHASA INGGRIS',
+        'waktu': '28 April 2024 13:00 WIB',
+        'info': _getInfo()
+      },
+      {
+        'mapel': 'ISLOSD – MATEMATIKA',
+        'waktu': '29 April 2024 13:00 WIB',
+        'info': _getInfo()
+      },
+    ];
+
+>>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
     return Column(
       children: mapelList.map((mapelItem) {
         return Card(

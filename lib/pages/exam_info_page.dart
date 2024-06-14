@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'exam_question_page.dart';
-
 
 class ExamInfoPage extends StatelessWidget {
   @override
@@ -32,21 +30,26 @@ class ExamInfoPage extends StatelessWidget {
                       ),
                       child: Text(
                         'GYPEM OLIMPIADE',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     SizedBox(height: 10),
                     Text(
                       'Selamat Mengerjakan',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 20),
-                    Text('Tingkat Pendidikan : Universitas', textAlign: TextAlign.center),
-                    Text('Jenis Soal : Pilihan Ganda', textAlign: TextAlign.center),
+                    Text('Tingkat Pendidikan : Universitas',
+                        textAlign: TextAlign.center),
+                    Text('Jenis Soal : Pilihan Ganda',
+                        textAlign: TextAlign.center),
                     Text('Jumlah Soal : 10', textAlign: TextAlign.center),
-                    Text('Waktu Pengerjaan : 30 menit', textAlign: TextAlign.center),
+                    Text('Waktu Pengerjaan : 30 menit',
+                        textAlign: TextAlign.center),
                     SizedBox(height: 20),
                   ],
                 ),

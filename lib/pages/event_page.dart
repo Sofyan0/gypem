@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_onboarding_screen/pages/event_details.dart';
+import 'event_details.dart';
 
 class EventPage extends StatelessWidget {
+  final int selectedEventIndex;
+
+  EventPage({required this.selectedEventIndex});
+
   @override
   Widget build(BuildContext context) {
     final List<String> eventOlimpiadeImages = [
@@ -21,17 +25,18 @@ class EventPage extends StatelessWidget {
         title: Text('Event yang Diikuti'),
       ),
       body: ListView.builder(
-        itemCount: eventOlimpiadeImages.length,
+        itemCount: 1,
         itemBuilder: (BuildContext context, int index) {
+          int eventIndex = selectedEventIndex;
           return GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EventDetailsPage(
-                    title: eventOlimpiadeTexts[index],
+                    title: eventOlimpiadeTexts[eventIndex],
                     description: 'SD - UNIVERSITAS',
-                    image: eventOlimpiadeImages[index],
+                    image: eventOlimpiadeImages[eventIndex],
                   ),
                 ),
               );
@@ -48,20 +53,21 @@ class EventPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image: AssetImage(eventOlimpiadeImages[index]),
+                        image: AssetImage(eventOlimpiadeImages[eventIndex]),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            eventOlimpiadeTexts[index],
+                            eventOlimpiadeTexts[eventIndex],
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
