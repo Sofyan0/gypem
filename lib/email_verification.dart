@@ -21,7 +21,7 @@ class _EmailVerificationState extends State<EmailVerification> {
   Future<void> _sendVerificationEmail() async {
     if (_formKey.currentState?.validate() ?? false) {
       final response = await http.post(
-        Uri.parse('http://192.168.18.10/ApiFlutter/send_verification_email.php'),
+        Uri.parse('http://192.168.1.35/ApiFlutter/send_verification_email.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

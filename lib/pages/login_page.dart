@@ -20,13 +20,9 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-<<<<<<< HEAD
-        final response = await http.post(Uri.parse('http://192.168.18.10/ApiFlutter/login.php'),
-
-=======
         final response = await http.post(
-          Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
+          Uri.parse('http://192.168.1.35/ApiFlutter/login.php'),
+
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, String>{
             'username': _emailController.text,
@@ -366,7 +362,7 @@ class OtpVerificationPage extends StatelessWidget {
   void _verifyOtp(BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http:// 192.168.1.42/ApiFlutter/verify_otp.php'),
+        Uri.parse('http://192.168.1.35/ApiFlutter/verify_otp.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{
           'email': email,
@@ -474,7 +470,7 @@ class ResetPasswordPage extends StatelessWidget {
   void _updatePassword(BuildContext context) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.18.9/ApiFlutter/login.php'),
+        Uri.parse('http://192.168.1.35/ApiFlutter/login.php'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{
           'email': email,

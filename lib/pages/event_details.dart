@@ -37,12 +37,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     {
       'mapel': 'ISLO SMA – BAHASA INGGRIS',
       'waktu': '28 April 2024 13:00 WIB',
-      'info': 'Belum daftar'
+      'info': 'Kerjakan'
     },
     {
       'mapel': 'ISLO SMA – MATEMATIKA',
       'waktu': '29 April 2024 13:00 WIB',
-      'info': 'Belum daftar'
+      'info': 'Validasi Berhasil'
     },
   ];
 
@@ -107,8 +107,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         );
                         if (result == true) {
                           _register();
-<<<<<<< HEAD
-=======
+
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => AgreementPage(
@@ -117,7 +116,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                   eventImage: 'assets/images/event_image.jpg'),
                             ),
                           );
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
                         }
                       },
                       child: Text('Daftar'),
@@ -198,27 +196,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   }
 
   Widget _buildMapelList() {
-<<<<<<< HEAD
-=======
-    List<Map<String, String>> mapelList = [
-      {
-        'mapel': 'ISLOSD – BAHASA INDONESIA',
-        'waktu': '27 April 2024 13:00 WIB',
-        'info': _getInfo()
-      },
-      {
-        'mapel': 'ISLOSD – BAHASA INGGRIS',
-        'waktu': '28 April 2024 13:00 WIB',
-        'info': _getInfo()
-      },
-      {
-        'mapel': 'ISLOSD – MATEMATIKA',
-        'waktu': '29 April 2024 13:00 WIB',
-        'info': _getInfo()
-      },
-    ];
-
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
     return Column(
       children: mapelList.map((mapelItem) {
         return Card(

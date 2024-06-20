@@ -19,11 +19,9 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
   List<bool> isDoubtful = List.filled(10, false);
   List<int> scores = List.filled(10, 0);
   late Timer timer;
-<<<<<<< HEAD
+  int selectedIndex = 0; // Define the selectedIndex here
+
   int remainingSeconds = 1800; // 30 minutes
-=======
-  int remainingSeconds = 5400; // 1 hour 30 minutes
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
 
   // List of questions and their correct answers
   List<String> questions = [
@@ -100,8 +98,6 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       if (remainingSeconds == 0) {
         t.cancel();
-<<<<<<< HEAD
-        // Show time's up dialog
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -114,7 +110,7 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
                     // Redirect to EventPage
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => EventPage()),
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                   },
                   child: Text("OK"),
@@ -123,9 +119,7 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
             );
           },
         );
-=======
-        // Add logic here when time is up
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
+
       } else {
         setState(() {
           remainingSeconds--;
@@ -215,12 +209,9 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
     // Check if any question has been answered
     bool anyAnswered = selectedAnswers.any((answer) => answer.isNotEmpty);
 
-<<<<<<< HEAD
+
     if  (!anyAnswered) {
-=======
-    if (!anyAnswered) {
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
-      // If no question has been answered, show an alert dialog
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -293,17 +284,17 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Ujian Selesai!"),
+                    title: Text("Ujian Selesai!"),
           content: Text("Total Skor Anda: $totalScore"),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Redirect to EventPage
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
+                // Redirect to EventPage with selectedIndex
+ Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
               },
               child: Text("OK"),
             ),
@@ -348,10 +339,6 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
             ),
             Text('Sisa Waktu : ${formatTime(remainingSeconds)}'),
             SizedBox(height: 20),
-<<<<<<< HEAD
-=======
-            SizedBox(height: 20),
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
             Text(questions[currentQuestionIndex - 1]),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -498,13 +485,12 @@ class _ExamQuestionPageState extends State<ExamQuestionPage> {
       ),
     );
   }
-<<<<<<< HEAD
-=======
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: ExamQuestionPage(),
-  ));
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
-}
+// void main() {
+//   runApp(MaterialApp(
+//     home: ExamQuestionPage(mapel: "Bahasa Inggris"),
+//   ));
+// }
+
+         

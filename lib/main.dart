@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/email_verification.dart';
-<<<<<<< HEAD
 import 'package:flutter_onboarding_screen/pages/exam_info_page.dart';
 import 'package:flutter_onboarding_screen/pages/history_page.dart';
 import 'package:flutter_onboarding_screen/pages/profile_page.dart';
-
-=======
 import 'package:flutter_onboarding_screen/pages/exam_question_page.dart';
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_onboarding_screen/onboarding.dart';
-import 'pages/home_page.dart';
-import 'pages/login_page.dart';
-import 'pages/event_details.dart';
+import 'package:flutter_onboarding_screen/pages/home_page.dart';
+import 'package:flutter_onboarding_screen/pages/login_page.dart';
+import 'package:flutter_onboarding_screen/pages/event_details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

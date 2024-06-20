@@ -28,7 +28,7 @@ class _PasswordResetState extends State<PasswordReset> {
   Future<void> _resetPassword() async {
     if (_formKey.currentState?.validate() ?? false) {
       final response = await http.post(
-        Uri.parse('http://192.168.18.10/ApiFlutter/reset_password.php'),
+        Uri.parse('http://192.168.1.35/ApiFlutter/reset_password.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

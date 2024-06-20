@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String? username = prefs.getString('username');
     if (username != null) {
       final response = await http.get(Uri.parse(
-          'http://192.168.18.10/ApiFlutter/updateprofile.php?username=$username'));
+          'http://192.168.1.35/ApiFlutter/updateprofile.php?username=$username'));
       if (response.statusCode == 200) {
         final userData = json.decode(response.body);
         return {
@@ -391,7 +391,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     });
     if (username != null) {
       final response = await http.get(Uri.parse(
-          'http://192.168.18.10/ApiFlutter/updateprofile.php?username=$username'));
+          'http://192.168.1.35/ApiFlutter/updateprofile.php?username=$username'));
       if (response.statusCode == 200) {
         final userData = json.decode(response.body);
         setState(() {
@@ -415,7 +415,7 @@ class _ChangeProfilePageState extends State<ChangeProfilePage> {
     }
 
     final response = await http.post(
-      Uri.parse('http://192.168.18.10/ApiFlutter/updateprofile.php'),
+      Uri.parse('http://192.168.1.35/ApiFlutter/updateprofile.php'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -583,7 +583,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? username = prefs.getString('username');
     final response = await http.post(
-      Uri.parse('http://192.168.18.10/ApiFlutter/updatepassword.php'),
+      Uri.parse('http://192.168.1.35/ApiFlutter/updatepassword.php'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

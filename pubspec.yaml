@@ -25,12 +25,10 @@ dependencies:
   flutter_pdfview: ^1.0.4+2
   permission_handler: ^10.2.0
 
-<<<<<<< HEAD
+
   # cloud_firestore: ^4.17.4
 dev_dependencies:
-=======
-dev_dependencies: 
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
+
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
@@ -42,11 +40,11 @@ flutter:
     - assets/
     - assets/images/
     - assets/sosialmedia/
-<<<<<<< HEAD
+
     - assets/images/poster1.jpg
     - assets/images/poster2.jpg
     - assets/images/poster3.jpg
     - assets/pdf/juknis.pdf
-=======
-    - assets/pdf/juknis.pdf
->>>>>>> 929db3dc401bc4d85f39d801d565513fb57ec429
+
+   
+

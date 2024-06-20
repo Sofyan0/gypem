@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/Components/color.dart';
 import 'package:flutter_onboarding_screen/Components/onboarding_data.dart';
 import 'package:flutter_onboarding_screen/pages/login_page.dart';
-
+import 'package:flutter_onboarding_screen/pages/event_details.dart';
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key});
 
